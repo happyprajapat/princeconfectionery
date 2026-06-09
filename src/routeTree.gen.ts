@@ -17,6 +17,10 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
+import { Route as AdminProductsRouteImport } from './routes/admin.products'
+import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
+import { Route as AdminProductsNewRouteImport } from './routes/admin.products.new'
+import { Route as AdminProductsIdEditRouteImport } from './routes/admin.products.$id.edit'
 
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
@@ -58,6 +62,26 @@ const ProductSlugRoute = ProductSlugRouteImport.update({
   path: '/product/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminProductsRoute = AdminProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProductsNewRoute = AdminProductsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AdminProductsRoute,
+} as any)
+const AdminProductsIdEditRoute = AdminProductsIdEditRouteImport.update({
+  id: '/$id/edit',
+  path: '/$id/edit',
+  getParentRoute: () => AdminProductsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -66,8 +90,12 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/catalogue': typeof CatalogueRoute
   '/contact': typeof ContactRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/products': typeof AdminProductsRouteWithChildren
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/products/new': typeof AdminProductsNewRoute
+  '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -75,8 +103,12 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/catalogue': typeof CatalogueRoute
   '/contact': typeof ContactRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/products': typeof AdminProductsRouteWithChildren
   '/product/$slug': typeof ProductSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/products/new': typeof AdminProductsNewRoute
+  '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -86,8 +118,12 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/catalogue': typeof CatalogueRoute
   '/contact': typeof ContactRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/products': typeof AdminProductsRouteWithChildren
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/products/new': typeof AdminProductsNewRoute
+  '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -98,8 +134,12 @@ export interface FileRouteTypes {
     | '/auth'
     | '/catalogue'
     | '/contact'
+    | '/admin/categories'
+    | '/admin/products'
     | '/product/$slug'
     | '/admin/'
+    | '/admin/products/new'
+    | '/admin/products/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -107,8 +147,12 @@ export interface FileRouteTypes {
     | '/auth'
     | '/catalogue'
     | '/contact'
+    | '/admin/categories'
+    | '/admin/products'
     | '/product/$slug'
     | '/admin'
+    | '/admin/products/new'
+    | '/admin/products/$id/edit'
   id:
     | '__root__'
     | '/'
@@ -117,8 +161,12 @@ export interface FileRouteTypes {
     | '/auth'
     | '/catalogue'
     | '/contact'
+    | '/admin/categories'
+    | '/admin/products'
     | '/product/$slug'
     | '/admin/'
+    | '/admin/products/new'
+    | '/admin/products/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -189,14 +237,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/products': {
+      id: '/admin/products'
+      path: '/products'
+      fullPath: '/admin/products'
+      preLoaderRoute: typeof AdminProductsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/categories': {
+      id: '/admin/categories'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AdminCategoriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/products/new': {
+      id: '/admin/products/new'
+      path: '/new'
+      fullPath: '/admin/products/new'
+      preLoaderRoute: typeof AdminProductsNewRouteImport
+      parentRoute: typeof AdminProductsRoute
+    }
+    '/admin/products/$id/edit': {
+      id: '/admin/products/$id/edit'
+      path: '/$id/edit'
+      fullPath: '/admin/products/$id/edit'
+      preLoaderRoute: typeof AdminProductsIdEditRouteImport
+      parentRoute: typeof AdminProductsRoute
+    }
   }
 }
 
+interface AdminProductsRouteChildren {
+  AdminProductsNewRoute: typeof AdminProductsNewRoute
+  AdminProductsIdEditRoute: typeof AdminProductsIdEditRoute
+}
+
+const AdminProductsRouteChildren: AdminProductsRouteChildren = {
+  AdminProductsNewRoute: AdminProductsNewRoute,
+  AdminProductsIdEditRoute: AdminProductsIdEditRoute,
+}
+
+const AdminProductsRouteWithChildren = AdminProductsRoute._addFileChildren(
+  AdminProductsRouteChildren,
+)
+
 interface AdminRouteChildren {
+  AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminProductsRoute: typeof AdminProductsRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminProductsRoute: AdminProductsRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
 }
 
