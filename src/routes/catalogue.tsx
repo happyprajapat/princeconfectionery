@@ -65,7 +65,7 @@ function CataloguePage() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                navigate({ search: (p) => ({ ...p, q: query || undefined }) });
+                navigate({ search: (p: { category?: string; q?: string; seasonal?: boolean }) => ({ ...p, q: query || undefined }) });
               }}
               className="relative flex-1 max-w-md"
             >
@@ -79,7 +79,7 @@ function CataloguePage() {
               {query && (
                 <button
                   type="button"
-                  onClick={() => { setQuery(""); navigate({ search: (p) => ({ ...p, q: undefined }) }); }}
+                  onClick={() => { setQuery(""); navigate({ search: (p: { category?: string; q?: string; seasonal?: boolean }) => ({ ...p, q: undefined }) }); }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                 >
                   <X className="h-4 w-4" />
@@ -87,7 +87,7 @@ function CataloguePage() {
               )}
             </form>
             <button
-              onClick={() => navigate({ search: (p) => ({ ...p, seasonal: p.seasonal ? undefined : true }) })}
+              onClick={() => navigate({ search: (p: { category?: string; q?: string; seasonal?: boolean }) => ({ ...p, seasonal: p.seasonal ? undefined : true }) })}
               className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
                 search.seasonal ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background text-foreground hover:border-primary/40"
               }`}
