@@ -105,7 +105,7 @@ function CataloguePage() {
           <nav className="mt-3 flex flex-wrap gap-2 lg:flex-col">
             <Link
               to="/catalogue"
-              search={(p) => ({ ...p, category: undefined })}
+              search={(p: { category?: string; q?: string; seasonal?: boolean }) => ({ ...p, category: undefined })}
               className={`rounded-md px-3 py-2 text-sm transition ${!search.category ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-muted"}`}
             >
               All products
@@ -114,7 +114,7 @@ function CataloguePage() {
               <Link
                 key={c.id}
                 to="/catalogue"
-                search={(p) => ({ ...p, category: c.slug })}
+                search={(p: { category?: string; q?: string; seasonal?: boolean }) => ({ ...p, category: c.slug })}
                 className={`rounded-md px-3 py-2 text-sm transition ${search.category === c.slug ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-muted"}`}
               >
                 {c.name}
