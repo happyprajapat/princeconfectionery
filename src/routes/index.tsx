@@ -152,7 +152,7 @@ function Counter({ to, suffix = "", duration = 1.6 }: { to: number; suffix?: str
   const [text, setText] = useState("0" + suffix);
   useEffect(() => {
     if (!inView) return;
-    const controls = animate(mv, to, { duration, ease: [0.2, 0.7, 0.2, 1] });
+    const controls = animate(mv, to, { duration, ease: "easeOut" });
     const unsub = rounded.on("change", setText);
     return () => { controls.stop(); unsub(); };
   }, [inView, to, duration, mv, rounded]);
