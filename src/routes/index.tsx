@@ -1,199 +1,474 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, Sparkles, Truck, ShieldCheck, Phone } from "lucide-react";
+import { motion, useInView, useMotionValue, useTransform, animate } from "framer-motion";
+import {
+  ArrowRight, Sparkles, Phone, MessageCircle, ShieldCheck, Truck, Award, Boxes, Leaf, PackageCheck,
+  Cookie, Cake, Candy, Wheat, Croissant, Nut, ShoppingBasket, Flame, Star, CheckCircle2,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { SiteShell } from "@/components/site-shell";
 import { SITE } from "@/lib/site";
-import { fetchCategories, fetchVisibleProducts } from "@/lib/catalogue";
-import heroImg from "@/assets/hero.jpg";
+import { fetchCategories, fetchVisibleProducts, type Product, type Category } from "@/lib/catalogue";
+
+const WA = `https://wa.me/${SITE.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(
+  "Hello Prince Confectionery Departmental, I would like information about your products."
+)}`;
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Prince Confectionery Departmental — Wholesale Namkeen, Sweets & Snacks in Tricity" },
-      { name: "description", content: "Wholesale supplier of namkeen, biscuits, sweets, snacks, roasted items, confectionery and dry cakes across Chandigarh, Mohali and Panchkula." },
-      { property: "og:title", content: "Prince Confectionery Departmental — Tricity Wholesale" },
-      { property: "og:description", content: "Browse our full range of namkeen, sweets, biscuits and seasonal specials. Trusted wholesale partner across Tricity." },
+      { title: "Prince Confectionery Departmental — Premium Wholesale Namkeen, Sweets & Snacks" },
+      { name: "description", content: "Premium namkeen, biscuits, sweets, bakery products, roasted snacks, dry fruits & grocery for retail and wholesale customers in Tricity." },
+      { property: "og:title", content: "Prince Confectionery Departmental" },
+      { property: "og:description", content: "200+ premium products across namkeen, sweets, bakery, roasted snacks, dry fruits & grocery — wholesale & retail." },
     ],
   }),
   component: Home,
 });
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: (i = 0) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.6, ease: "easeOut" as const, delay: i * 0.06 },
+  }),
+};
+
 function Home() {
   const { data: categories = [] } = useQuery({ queryKey: ["categories"], queryFn: fetchCategories });
   const { data: products = [] } = useQuery({ queryKey: ["products", "visible"], queryFn: fetchVisibleProducts });
-
-  const seasonal = products.filter((p) => p.is_seasonal).slice(0, 4);
   const featured = products.slice(0, 6);
 
   return (
     <SiteShell>
-      {/* HERO */}
-      <section className="relative overflow-hidden bg-grain">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-24">
-          <div className="flex flex-col justify-center">
-            <span className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
-              <Sparkles className="h-3 w-3" /> Tricity Wholesale
-            </span>
-            <h1 className="mt-5 font-display text-5xl font-semibold leading-[1.05] text-foreground sm:text-6xl lg:text-7xl text-balance">
-              Sweet, savoury &<br />
-              <span className="text-primary italic">festive favourites</span><br />
-              for every shop.
-            </h1>
-            <p className="mt-6 max-w-lg text-lg text-muted-foreground text-balance">
-              {SITE.tagline}. Browse our complete range — categorised, always fresh, with seasonal specials rotating year-round.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/catalogue"
-                className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md transition hover:opacity-90"
-              >
-                Browse catalogue <ArrowRight className="h-4 w-4" />
-              </Link>
-              <a
-                href={`tel:${SITE.phone.replace(/\s/g, "")}`}
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-6 py-3 text-sm font-semibold text-foreground transition hover:bg-muted"
-              >
-                <Phone className="h-4 w-4" /> Talk to us
-              </a>
-            </div>
-
-            <div className="mt-10 grid grid-cols-3 gap-6 border-t border-border pt-6">
-              <Stat value="200+" label="Products" />
-              <Stat value="7" label="Categories" />
-              <Stat value="All season" label="Availability" />
-            </div>
-          </div>
-
-          <div className="relative">
-            <div className="absolute -inset-4 rounded-3xl bg-primary/10 blur-2xl" />
-            <img
-              src={heroImg}
-              alt="Assorted wholesale namkeen, sweets, biscuits and roasted items"
-              width={1600}
-              height={1024}
-              className="relative aspect-[4/3] w-full rounded-3xl object-cover shadow-2xl"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* TRUST */}
-      <section className="border-y border-border bg-secondary/30">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 py-10 sm:grid-cols-3 sm:px-6 lg:px-8">
-          <Feature icon={<Truck className="h-5 w-5" />} title="Tricity-wide delivery" desc="Reliable supply across Chandigarh, Mohali & Panchkula." />
-          <Feature icon={<Sparkles className="h-5 w-5" />} title="Seasonal specials" desc="Diwali, Holi, Rakhi & festive range — refreshed every season." />
-          <Feature icon={<ShieldCheck className="h-5 w-5" />} title="Trusted by retailers" desc="Years of relationships with shops across the region." />
-        </div>
-      </section>
-
-      {/* CATEGORIES */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <div className="flex items-end justify-between">
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-primary">Shop by category</p>
-            <h2 className="mt-2 font-display text-4xl font-semibold text-foreground">Our full range</h2>
-          </div>
-          <Link to="/catalogue" className="hidden sm:inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
-            View all <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-
-        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {categories.map((c) => (
-            <Link
-              key={c.id}
-              to="/catalogue"
-              search={{ category: c.slug }}
-              className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 transition hover:border-primary/40 hover:shadow-lg"
-            >
-              <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-primary/5 transition group-hover:bg-primary/15" />
-              <h3 className="relative font-display text-xl font-semibold text-foreground">{c.name}</h3>
-              <p className="relative mt-1 text-sm text-muted-foreground">Explore range</p>
-              <ArrowRight className="relative mt-6 h-4 w-4 text-primary opacity-0 transition group-hover:opacity-100" />
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* SEASONAL */}
-      {seasonal.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-primary">In season now</p>
-          <h2 className="mt-2 font-display text-4xl font-semibold text-foreground">Festive specials</h2>
-          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {seasonal.map((p) => (
-              <ProductCard key={p.id} p={p} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* FEATURED */}
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="flex items-end justify-between">
-          <h2 className="font-display text-4xl font-semibold text-foreground">Latest in catalogue</h2>
-          <Link to="/catalogue" className="text-sm font-medium text-primary hover:underline">See all</Link>
-        </div>
-        {featured.length === 0 ? (
-          <p className="mt-8 rounded-xl border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
-            Products will appear here once added from the admin panel.
-          </p>
-        ) : (
-          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-3">
-            {featured.map((p) => <ProductCard key={p.id} p={p} />)}
-          </div>
-        )}
-      </section>
+      <Hero />
+      <Stats productCount={products.length} categoryCount={categories.length || 8} />
+      <Categories categories={categories} />
+      <FeaturedProducts products={featured} />
+      <WhyUs />
+      <Inquiry />
+      <ContactBlock />
     </SiteShell>
   );
 }
 
-function Stat({ value, label }: { value: string; label: string }) {
+/* ---------- HERO ---------- */
+function Hero() {
   return (
-    <div>
-      <p className="font-display text-2xl font-semibold text-foreground">{value}</p>
-      <p className="text-xs uppercase tracking-wider text-muted-foreground">{label}</p>
-    </div>
-  );
-}
+    <section className="relative overflow-hidden">
+      {/* animated gradient mesh background */}
+      <div className="absolute inset-0 bg-mesh animate-gradient" aria-hidden />
+      <div className="absolute inset-0 bg-dot-grid opacity-40" aria-hidden />
 
-function Feature({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
-  return (
-    <div className="flex gap-4">
-      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">{icon}</div>
-      <div>
-        <h3 className="font-display text-base font-semibold text-foreground">{title}</h3>
-        <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
+      {/* floating decorative shapes */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+        <div className="absolute -top-20 -left-20 h-72 w-72 rounded-full gradient-brand opacity-20 blur-3xl animate-float-slow" />
+        <div className="absolute top-40 -right-24 h-80 w-80 rounded-full gradient-warm opacity-25 blur-3xl animate-float" />
+        <div className="absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-violet-c/20 blur-3xl animate-float-slow" />
+        <FloatingIcon className="left-[8%] top-[22%]" delay={0}><Cookie className="h-6 w-6" /></FloatingIcon>
+        <FloatingIcon className="right-[10%] top-[18%]" delay={1.2}><Candy className="h-6 w-6" /></FloatingIcon>
+        <FloatingIcon className="left-[14%] bottom-[18%]" delay={2}><Cake className="h-6 w-6" /></FloatingIcon>
+        <FloatingIcon className="right-[16%] bottom-[24%]" delay={0.6}><Nut className="h-6 w-6" /></FloatingIcon>
       </div>
-    </div>
-  );
-}
 
-function ProductCard({ p }: { p: { id: string; name: string; slug: string; image_url: string | null; is_seasonal: boolean; season_label: string | null; pack_sizes: string[] } }) {
-  return (
-    <Link
-      to="/product/$slug"
-      params={{ slug: p.slug }}
-      className="group block overflow-hidden rounded-2xl border border-border bg-card transition hover:border-primary/40 hover:shadow-md"
-    >
-      <div className="relative aspect-square overflow-hidden bg-muted">
-        {p.image_url ? (
-          <img src={p.image_url} alt={p.name} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
-        ) : (
-          <div className="grid h-full w-full place-items-center font-display text-3xl text-muted-foreground/40">P</div>
-        )}
-        {p.is_seasonal && (
-          <span className="absolute left-3 top-3 rounded-full bg-primary px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">
-            {p.season_label || "Seasonal"}
+      <div className="relative mx-auto max-w-7xl px-4 pt-20 pb-28 sm:px-6 lg:px-8 lg:pt-28 lg:pb-36 text-center">
+        <motion.div initial="hidden" animate="show" variants={fadeUp}>
+          <span className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-foreground/80 shadow-sm">
+            <Sparkles className="h-3.5 w-3.5 text-violet-c" />
+            Tricity's Premium Confectionery House
           </span>
+        </motion.div>
+
+        <motion.h1
+          initial="hidden" animate="show" custom={1} variants={fadeUp}
+          className="mt-6 font-display text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl text-balance"
+        >
+          <span className="text-gradient-brand">Prince Confectionery</span>
+          <br />
+          <span className="text-foreground">Departmental</span>
+        </motion.h1>
+
+        <motion.p
+          initial="hidden" animate="show" custom={2} variants={fadeUp}
+          className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl text-balance"
+        >
+          Premium <span className="text-gradient-warm font-semibold">Namkeen, Bakery, Sweets & Snacks</span> for
+          retail and wholesale customers — curated from 200+ trusted products.
+        </motion.p>
+
+        <motion.div
+          initial="hidden" animate="show" custom={3} variants={fadeUp}
+          className="mt-9 flex flex-wrap justify-center gap-3"
+        >
+          <Link
+            to="/catalogue"
+            className="group inline-flex items-center gap-2 rounded-full gradient-brand px-7 py-3.5 text-sm font-semibold text-white shadow-glow transition hover:scale-105"
+          >
+            Browse Products
+            <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+          </Link>
+          <a
+            href={WA}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-full glass px-7 py-3.5 text-sm font-semibold text-foreground transition hover:scale-105"
+          >
+            <MessageCircle className="h-4 w-4 text-emerald" /> Contact on WhatsApp
+          </a>
+        </motion.div>
+
+        <motion.div
+          initial="hidden" animate="show" custom={4} variants={fadeUp}
+          className="mt-12 flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs font-medium text-muted-foreground"
+        >
+          {["Wholesale rates", "Retail welcome", "Fresh stock daily", "Tricity delivery"].map((t) => (
+            <span key={t} className="inline-flex items-center gap-1.5">
+              <CheckCircle2 className="h-3.5 w-3.5 text-emerald" /> {t}
+            </span>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function FloatingIcon({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
+  return (
+    <div
+      className={`absolute hidden md:grid h-12 w-12 place-items-center rounded-2xl glass text-violet-c shadow-glow animate-float ${className}`}
+      style={{ animationDelay: `${delay}s` }}
+    >
+      {children}
+    </div>
+  );
+}
+
+/* ---------- STATS ---------- */
+function Counter({ to, suffix = "", duration = 1.6 }: { to: number; suffix?: string; duration?: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const mv = useMotionValue(0);
+  const rounded = useTransform(mv, (v) => Math.round(v).toString() + suffix);
+  const [text, setText] = useState("0" + suffix);
+  useEffect(() => {
+    if (!inView) return;
+    const controls = animate(mv, to, { duration, ease: "easeOut" });
+    const unsub = rounded.on("change", setText);
+    return () => { controls.stop(); unsub(); };
+  }, [inView, to, duration, mv, rounded]);
+  return <span ref={ref}>{text}</span>;
+}
+
+function Stats({ productCount, categoryCount }: { productCount: number; categoryCount: number }) {
+  const stats = [
+    { value: Math.max(productCount, 200), suffix: "+", label: "Products" },
+    { value: categoryCount, suffix: "+", label: "Categories" },
+    { value: 100, suffix: "%", label: "Quality Assured" },
+    { value: 10, suffix: "+", label: "Years of Trust" },
+  ];
+  return (
+    <section className="relative -mt-12">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.6 }}
+          className="grid grid-cols-2 gap-3 rounded-3xl glass p-6 shadow-glow sm:grid-cols-4 sm:p-8"
+        >
+          {stats.map((s) => (
+            <div key={s.label} className="text-center">
+              <p className="font-display text-3xl font-extrabold sm:text-4xl text-gradient-brand">
+                <Counter to={s.value} suffix={s.suffix} />
+              </p>
+              <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{s.label}</p>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- CATEGORIES ---------- */
+const CATEGORY_VISUAL: Record<string, { icon: React.ReactNode; gradient: string }> = {
+  "namkeen":          { icon: <Flame className="h-6 w-6" />,            gradient: "from-orange-500 via-red-500 to-rose-500" },
+  "biscuits":         { icon: <Cookie className="h-6 w-6" />,           gradient: "from-amber-500 via-orange-500 to-red-500" },
+  "sweets":           { icon: <Candy className="h-6 w-6" />,            gradient: "from-pink-500 via-fuchsia-500 to-violet-500" },
+  "snacks":           { icon: <Flame className="h-6 w-6" />,            gradient: "from-yellow-500 via-amber-500 to-orange-500" },
+  "roasted-items":    { icon: <Nut className="h-6 w-6" />,              gradient: "from-amber-600 via-orange-600 to-rose-600" },
+  "roasted-snacks":   { icon: <Nut className="h-6 w-6" />,              gradient: "from-amber-600 via-orange-600 to-rose-600" },
+  "confectionery":    { icon: <Candy className="h-6 w-6" />,            gradient: "from-violet-500 via-purple-500 to-fuchsia-500" },
+  "dry-cakes":        { icon: <Cake className="h-6 w-6" />,             gradient: "from-rose-500 via-pink-500 to-fuchsia-500" },
+  "bakery-products":  { icon: <Croissant className="h-6 w-6" />,        gradient: "from-amber-400 via-orange-500 to-rose-500" },
+  "rusk":             { icon: <Wheat className="h-6 w-6" />,            gradient: "from-yellow-600 via-amber-600 to-orange-600" },
+  "dry-fruits":       { icon: <Nut className="h-6 w-6" />,              gradient: "from-emerald-500 via-teal-500 to-cyan-500" },
+  "grocery":          { icon: <ShoppingBasket className="h-6 w-6" />,   gradient: "from-blue-500 via-indigo-500 to-violet-500" },
+};
+
+function Categories({ categories }: { categories: Category[] }) {
+  return (
+    <section className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }} transition={{ duration: 0.5 }}
+        className="text-center"
+      >
+        <p className="text-xs font-bold uppercase tracking-[0.22em] text-violet-c">Shop by category</p>
+        <h2 className="mt-3 font-display text-4xl font-extrabold sm:text-5xl">
+          Explore our <span className="text-gradient-brand">complete range</span>
+        </h2>
+        <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
+          Eight carefully curated categories. Every product hand-picked for freshness and value.
+        </p>
+      </motion.div>
+
+      <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        {categories.map((c, i) => {
+          const v = CATEGORY_VISUAL[c.slug] ?? { icon: <Boxes className="h-6 w-6" />, gradient: "from-indigo-500 via-violet-500 to-fuchsia-500" };
+          return (
+            <motion.div
+              key={c.id}
+              initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5, delay: i * 0.05 }}
+            >
+              <Link
+                to="/catalogue"
+                search={{ category: c.slug }}
+                className="group relative block overflow-hidden rounded-3xl border border-border bg-card p-6 hover-lift hover:shadow-glow"
+              >
+                <div className={`absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br ${v.gradient} opacity-20 blur-2xl transition group-hover:opacity-50 group-hover:scale-125`} />
+                <div className={`relative grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br ${v.gradient} text-white shadow-glow transition group-hover:scale-110 group-hover:rotate-6`}>
+                  {v.icon}
+                </div>
+                <h3 className="relative mt-5 font-display text-lg font-bold text-foreground">{c.name}</h3>
+                <p className="relative mt-1 text-xs text-muted-foreground">Explore range</p>
+                <ArrowRight className="relative mt-4 h-4 w-4 text-violet-c opacity-0 transition group-hover:opacity-100 group-hover:translate-x-1" />
+              </Link>
+            </motion.div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+/* ---------- FEATURED ---------- */
+function FeaturedProducts({ products }: { products: Product[] }) {
+  return (
+    <section className="relative overflow-hidden">
+      <div className="absolute inset-0 gradient-brand-soft" aria-hidden />
+      <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-violet-c">Featured</p>
+            <h2 className="mt-3 font-display text-4xl font-extrabold sm:text-5xl">
+              Customer <span className="text-gradient-warm">favourites</span>
+            </h2>
+          </div>
+          <Link to="/catalogue" className="inline-flex items-center gap-1 text-sm font-semibold text-violet-c hover:underline">
+            View all <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        {products.length === 0 ? (
+          <div className="mt-10 rounded-3xl border border-dashed border-border bg-card p-12 text-center">
+            <p className="text-sm text-muted-foreground">Products will appear here once added from the admin panel.</p>
+            <Link to="/auth" className="mt-3 inline-block text-sm font-semibold text-violet-c hover:underline">
+              Sign in to add products →
+            </Link>
+          </div>
+        ) : (
+          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-3">
+            {products.map((p, i) => <FeaturedCard key={p.id} p={p} i={i} />)}
+          </div>
         )}
       </div>
-      <div className="p-4">
-        <h3 className="font-display text-base font-semibold text-foreground line-clamp-1">{p.name}</h3>
-        {p.pack_sizes.length > 0 && (
-          <p className="mt-1 text-xs text-muted-foreground line-clamp-1">{p.pack_sizes.join(" • ")}</p>
-        )}
+    </section>
+  );
+}
+
+function FeaturedCard({ p, i }: { p: Product; i: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }} transition={{ duration: 0.5, delay: i * 0.06 }}
+    >
+      <Link
+        to="/product/$slug" params={{ slug: p.slug }}
+        className="group block overflow-hidden rounded-3xl border border-border bg-card hover-lift hover:shadow-glow"
+      >
+        <div className="relative aspect-square overflow-hidden bg-muted">
+          {p.image_url ? (
+            <img src={p.image_url} alt={p.name} loading="lazy"
+                 className="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
+          ) : (
+            <div className="grid h-full w-full place-items-center font-display text-4xl text-muted-foreground/30 gradient-brand-soft">P</div>
+          )}
+          {p.is_seasonal && (
+            <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full gradient-warm px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-glow-warm">
+              <Star className="h-3 w-3" /> {p.season_label || "Seasonal"}
+            </span>
+          )}
+          <div className="absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-black/70 to-transparent p-4 transition group-hover:translate-y-0">
+            <span className="inline-flex items-center gap-1 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-foreground">
+              View details <ArrowRight className="h-3 w-3" />
+            </span>
+          </div>
+        </div>
+        <div className="p-4">
+          <h3 className="font-display text-base font-bold text-foreground line-clamp-1">{p.name}</h3>
+          {p.pack_sizes.length > 0 && (
+            <p className="mt-1 text-xs text-muted-foreground line-clamp-1">{p.pack_sizes.join(" • ")}</p>
+          )}
+        </div>
+      </Link>
+    </motion.div>
+  );
+}
+
+/* ---------- WHY US ---------- */
+function WhyUs() {
+  const items = [
+    { icon: <Award className="h-6 w-6" />, title: "Quality Products", desc: "Hand-picked from trusted brands, regularly checked for freshness." },
+    { icon: <Boxes className="h-6 w-6" />, title: "Wholesale Rates", desc: "Sharp pricing for shopkeepers, retailers and bulk buyers." },
+    { icon: <PackageCheck className="h-6 w-6" />, title: "Wide Product Range", desc: "200+ SKUs spanning eight curated categories — all in one place." },
+    { icon: <Leaf className="h-6 w-6" />, title: "Fresh Stock Daily", desc: "Rotating inventory and seasonal specials, never stale." },
+    { icon: <ShieldCheck className="h-6 w-6" />, title: "Trusted Supplier", desc: "Years of relationships with retailers across the Tricity." },
+    { icon: <Truck className="h-6 w-6" />, title: "Premium Packaging", desc: "Travel-safe packing that keeps your stock shelf-ready." },
+  ];
+  return (
+    <section className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+      <div className="text-center">
+        <p className="text-xs font-bold uppercase tracking-[0.22em] text-violet-c">Why choose us</p>
+        <h2 className="mt-3 font-display text-4xl font-extrabold sm:text-5xl">
+          Built on <span className="text-gradient-brand">trust & taste</span>
+        </h2>
       </div>
-    </Link>
+      <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((it, i) => (
+          <motion.div
+            key={it.title}
+            initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }} transition={{ duration: 0.5, delay: i * 0.05 }}
+            className="group relative overflow-hidden rounded-3xl border border-border bg-card p-7 hover-lift hover:shadow-glow"
+          >
+            <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full gradient-brand opacity-0 blur-2xl transition group-hover:opacity-20" />
+            <div className="relative grid h-12 w-12 place-items-center rounded-2xl gradient-brand text-white shadow-glow transition group-hover:scale-110">
+              {it.icon}
+            </div>
+            <h3 className="relative mt-5 font-display text-lg font-bold text-foreground">{it.title}</h3>
+            <p className="relative mt-2 text-sm text-muted-foreground leading-relaxed">{it.desc}</p>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ---------- INQUIRY ---------- */
+function Inquiry() {
+  const [form, setForm] = useState({ name: "", mobile: "", business: "", products: "", message: "" });
+  const [submitting, setSubmitting] = useState(false);
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    const msg =
+      `*New Wholesale Inquiry*%0A` +
+      `*Name:* ${form.name}%0A` +
+      `*Mobile:* ${form.mobile}%0A` +
+      `*Business:* ${form.business}%0A` +
+      `*Products Required:* ${form.products}%0A` +
+      `*Message:* ${form.message}`;
+    const url = `https://wa.me/${SITE.whatsapp.replace(/\D/g, "")}?text=${msg}`;
+    window.open(url, "_blank");
+    setTimeout(() => setSubmitting(false), 800);
+  };
+
+  const inputCls =
+    "w-full rounded-xl border border-border bg-background/80 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-violet-c focus:outline-none focus:ring-4 focus:ring-violet-c/15";
+
+  return (
+    <section className="relative overflow-hidden py-24">
+      <div className="absolute inset-0 bg-navy" aria-hidden />
+      <div className="absolute inset-0 bg-mesh opacity-40 animate-gradient" aria-hidden />
+      <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.6 }}
+          className="grid gap-10 lg:grid-cols-[1fr_1.2fr] items-stretch"
+        >
+          <div className="text-white">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-amber">Wholesale inquiry</p>
+            <h2 className="mt-3 font-display text-4xl font-extrabold sm:text-5xl">
+              Let's talk <span className="text-gradient-warm">business.</span>
+            </h2>
+            <p className="mt-4 text-white/70 leading-relaxed">
+              Tell us what you need. We'll get back with rates, availability and packaging options — usually within the same day.
+            </p>
+            <div className="mt-8 space-y-3">
+              <a href={`tel:${SITE.phone.replace(/\s/g, "")}`} className="flex items-center gap-3 rounded-2xl glass-dark px-4 py-3 text-sm text-white transition hover:bg-white/10">
+                <span className="grid h-9 w-9 place-items-center rounded-xl gradient-warm"><Phone className="h-4 w-4" /></span>
+                {SITE.phone}
+              </a>
+              <a href={WA} target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-2xl glass-dark px-4 py-3 text-sm text-white transition hover:bg-white/10">
+                <span className="grid h-9 w-9 place-items-center rounded-xl" style={{ background: "linear-gradient(135deg,#25D366,#128C7E)" }}><MessageCircle className="h-4 w-4" /></span>
+                Chat on WhatsApp
+              </a>
+            </div>
+          </div>
+
+          <form onSubmit={onSubmit} className="rounded-3xl glass p-6 shadow-glow sm:p-8">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <input required maxLength={80} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Your name" className={inputCls} />
+              <input required maxLength={15} value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} placeholder="Mobile number" className={inputCls} inputMode="tel" />
+              <input maxLength={120} value={form.business} onChange={(e) => setForm({ ...form, business: e.target.value })} placeholder="Business / shop name" className={`${inputCls} sm:col-span-2`} />
+              <input maxLength={200} value={form.products} onChange={(e) => setForm({ ...form, products: e.target.value })} placeholder="Products required (e.g. Kaju Patisa 5kg)" className={`${inputCls} sm:col-span-2`} />
+              <textarea maxLength={500} rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Anything else?" className={`${inputCls} sm:col-span-2 resize-none`} />
+            </div>
+            <button
+              type="submit" disabled={submitting}
+              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full gradient-brand px-6 py-3.5 text-sm font-semibold text-white shadow-glow transition hover:scale-[1.02] disabled:opacity-60"
+            >
+              {submitting ? "Opening WhatsApp…" : (<>Send Inquiry <ArrowRight className="h-4 w-4" /></>)}
+            </button>
+            <p className="mt-3 text-center text-[11px] text-muted-foreground">
+              Your inquiry opens in WhatsApp — fastest way to reach us.
+            </p>
+          </form>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- CONTACT ---------- */
+function ContactBlock() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+      <div className="grid gap-6 lg:grid-cols-3">
+        {[
+          { icon: <Phone className="h-5 w-5" />, title: "Call us", body: SITE.phone, href: `tel:${SITE.phone.replace(/\s/g, "")}` },
+          { icon: <MessageCircle className="h-5 w-5" />, title: "WhatsApp", body: "Quick replies on chat", href: WA },
+          { icon: <Truck className="h-5 w-5" />, title: "We deliver across", body: SITE.address },
+        ].map((c, i) => (
+          <motion.a
+            key={c.title}
+            href={c.href ?? "#"}
+            target={c.href?.startsWith("http") ? "_blank" : undefined}
+            rel="noreferrer"
+            initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.06 }}
+            className="group block rounded-3xl glass p-7 hover-lift hover:shadow-glow"
+          >
+            <div className="grid h-12 w-12 place-items-center rounded-2xl gradient-brand text-white shadow-glow transition group-hover:scale-110">
+              {c.icon}
+            </div>
+            <h3 className="mt-5 font-display text-lg font-bold text-foreground">{c.title}</h3>
+            <p className="mt-1 text-sm text-muted-foreground">{c.body}</p>
+          </motion.a>
+        ))}
+      </div>
+    </section>
   );
 }
