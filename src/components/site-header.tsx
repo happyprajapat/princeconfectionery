@@ -31,13 +31,12 @@ export function SiteHeader() {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link to="/" className="group flex items-center gap-2.5">
-          <span className="grid h-10 w-10 place-items-center rounded-xl gradient-brand text-white font-display text-lg font-extrabold shadow-glow">
-            P
-          </span>
-          <span className="hidden sm:flex flex-col leading-tight">
-            <span className="font-display text-base font-bold text-foreground">Prince Confectionery</span>
-            <span className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">Departmental • Tricity</span>
-          </span>
+          <img
+            src={SITE.logo}
+            alt="Prince Confectionery Departmental logo"
+            className="h-11 w-auto object-contain"
+          />
+          <span className="sr-only">Prince Confectionery Departmental</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">

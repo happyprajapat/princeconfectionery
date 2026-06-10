@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Phone, MessageCircle, MapPin, Clock, Mail, Instagram, Facebook } from "lucide-react";
+import { Phone, MessageCircle, MapPin, Clock, Mail, Instagram, User, FileText } from "lucide-react";
 import { SITE } from "@/lib/site";
 
 export function SiteFooter() {
@@ -8,29 +8,47 @@ export function SiteFooter() {
       <div className="absolute inset-0 bg-mesh opacity-40" aria-hidden />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-2">
-          <div className="flex items-center gap-3">
-            <span className="grid h-11 w-11 place-items-center rounded-xl gradient-brand text-white font-display text-xl font-extrabold shadow-glow">
-              P
-            </span>
-            <span className="font-display text-xl font-bold">
-              Prince Confectionery Departmental
-            </span>
+          <div className="flex items-center gap-4">
+            <div className="rounded-2xl bg-white p-3 shadow-glow">
+              <img src={SITE.logo} alt="Prince Confectionery logo" className="h-14 w-auto object-contain" />
+            </div>
+            <div>
+              <div className="font-display text-xl font-bold leading-tight">Prince Confectionery</div>
+              <div className="text-xs uppercase tracking-[0.22em] text-amber/90 mt-1">Quality You May Rely</div>
+            </div>
           </div>
-          <p className="mt-4 max-w-md text-sm text-white/70 leading-relaxed">
+          <p className="mt-5 max-w-md text-sm text-white/70 leading-relaxed">
             Premium wholesale & retail supplier of namkeen, biscuits, sweets, bakery, roasted snacks,
             dry fruits and grocery — serving Tricity with quality and trust.
           </p>
+          <div className="mt-5 space-y-1.5 text-xs text-white/60">
+            <div className="flex items-center gap-2"><User className="h-3.5 w-3.5 text-amber" /> Proprietor: {SITE.owner}</div>
+            <div className="flex items-center gap-2"><FileText className="h-3.5 w-3.5 text-amber" /> GSTIN: {SITE.gst}</div>
+          </div>
           <div className="mt-6 flex gap-3">
-            {[Instagram, Facebook, MessageCircle].map((Icon, i) => (
-              <a
-                key={i}
-                href="#"
-                className="grid h-10 w-10 place-items-center rounded-full glass-dark text-white transition hover:scale-110 hover:bg-white/20"
-                aria-label="social"
-              >
-                <Icon className="h-4 w-4" />
-              </a>
-            ))}
+            <a
+              href={SITE.socials.instagram}
+              target="_blank" rel="noreferrer"
+              className="grid h-10 w-10 place-items-center rounded-full glass-dark text-white transition hover:scale-110 hover:bg-white/20"
+              aria-label="Instagram"
+            >
+              <Instagram className="h-4 w-4" />
+            </a>
+            <a
+              href={`https://wa.me/${SITE.whatsapp.replace(/\D/g, "")}`}
+              target="_blank" rel="noreferrer"
+              className="grid h-10 w-10 place-items-center rounded-full glass-dark text-white transition hover:scale-110 hover:bg-white/20"
+              aria-label="WhatsApp"
+            >
+              <MessageCircle className="h-4 w-4" />
+            </a>
+            <a
+              href={`tel:${SITE.phone.replace(/\s/g, "")}`}
+              className="grid h-10 w-10 place-items-center rounded-full glass-dark text-white transition hover:scale-110 hover:bg-white/20"
+              aria-label="Call"
+            >
+              <Phone className="h-4 w-4" />
+            </a>
           </div>
         </div>
 
