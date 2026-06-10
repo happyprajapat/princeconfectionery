@@ -274,7 +274,8 @@ function Categories({ categories }: { categories: Category[] }) {
           Explore our <span className="text-gradient-brand">complete range</span>
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-          Eight carefully curated categories. Every product hand-picked for freshness and value.
+          A constantly evolving range — refreshed every season with new arrivals
+          and festive specials. Hand-picked for freshness and value.
         </p>
       </motion.div>
 
