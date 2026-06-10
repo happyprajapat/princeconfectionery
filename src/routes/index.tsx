@@ -389,9 +389,9 @@ function WhyUs() {
   const items = [
     { icon: <Award className="h-6 w-6" />, title: "Quality Products", desc: "Hand-picked from trusted brands, regularly checked for freshness." },
     { icon: <Boxes className="h-6 w-6" />, title: "Wholesale Rates", desc: "Sharp pricing for shopkeepers, retailers and bulk buyers." },
-    { icon: <PackageCheck className="h-6 w-6" />, title: "Wide Product Range", desc: "200+ SKUs spanning eight curated categories — all in one place." },
+    { icon: <PackageCheck className="h-6 w-6" />, title: "Wide Product Range", desc: "200+ SKUs across an ever-evolving range of categories — all in one place." },
     { icon: <Leaf className="h-6 w-6" />, title: "Fresh Stock Daily", desc: "Rotating inventory and seasonal specials, never stale." },
-    { icon: <ShieldCheck className="h-6 w-6" />, title: "Trusted Supplier", desc: "Years of relationships with retailers across the Tricity." },
+    { icon: <ShieldCheck className="h-6 w-6" />, title: "Trusted Supplier", desc: `${SITE.yearsExperience}+ years of relationships with retailers across the Tricity.` },
     { icon: <Truck className="h-6 w-6" />, title: "Premium Packaging", desc: "Travel-safe packing that keeps your stock shelf-ready." },
   ];
   return (
