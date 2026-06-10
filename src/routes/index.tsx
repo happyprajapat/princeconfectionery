@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { motion, useInView, useMotionValue, useTransform, animate } from "framer-motion";
+import { motion, useInView, useMotionValue, useTransform, animate, useScroll, useSpring } from "framer-motion";
 import {
   ArrowRight, Sparkles, Phone, MessageCircle, ShieldCheck, Truck, Award, Boxes, Leaf, PackageCheck,
-  Cookie, Cake, Candy, Wheat, Croissant, Nut, ShoppingBasket, Flame, Star, CheckCircle2,
+  Cookie, Cake, Candy, Wheat, Croissant, Nut, ShoppingBasket, Flame, Star, CheckCircle2, Handshake,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { SiteShell } from "@/components/site-shell";
@@ -41,14 +41,71 @@ function Home() {
 
   return (
     <SiteShell>
+      <ScrollProgress />
       <Hero />
       <Stats productCount={products.length} categoryCount={categories.length || 8} />
+      <Brands />
       <Categories categories={categories} />
       <FeaturedProducts products={featured} />
       <WhyUs />
       <Inquiry />
-      <ContactBlock />
     </SiteShell>
+  );
+}
+
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const x = useSpring(scrollYProgress, { stiffness: 120, damping: 24, mass: 0.2 });
+  return (
+    <motion.div
+      style={{ scaleX: x, transformOrigin: "0% 50%" }}
+      className="fixed inset-x-0 top-0 z-50 h-[3px] gradient-brand"
+    />
+  );
+}
+
+function Brands() {
+  return (
+    <section className="relative overflow-hidden py-24">
+      <div className="absolute inset-0 gradient-brand-soft" aria-hidden />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.6 }}
+          className="text-center"
+        >
+          <span className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-foreground/80 shadow-sm">
+            <Handshake className="h-3.5 w-3.5 text-violet-c" /> Authorized distributor
+          </span>
+          <h2 className="mt-5 font-display text-4xl font-extrabold sm:text-5xl">
+            Premier distributors of <span className="text-gradient-brand">trusted brands</span>
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+            Proud authorized distributor of three iconic food brands across Tricity —
+            Chandigarh, Mohali & Panchkula.
+          </p>
+        </motion.div>
+
+        <div className="mt-14 grid gap-6 md:grid-cols-3">
+          {SITE.brands.map((b, i) => (
+            <motion.div
+              key={b.name}
+              initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.6, delay: i * 0.1 }}
+              className="group relative overflow-hidden rounded-3xl border border-border bg-card p-8 text-center hover-lift hover:shadow-glow"
+            >
+              <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full gradient-brand opacity-0 blur-3xl transition group-hover:opacity-20" />
+              <div className="relative mx-auto grid h-40 place-items-center rounded-2xl bg-white p-5">
+                <img src={b.logo} alt={b.name} className="max-h-32 w-auto object-contain transition group-hover:scale-105" />
+              </div>
+              <h3 className="relative mt-6 font-display text-xl font-bold text-foreground">{b.name}</h3>
+              <p className="relative mt-1 text-sm text-muted-foreground">{b.tagline}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -164,7 +221,7 @@ function Stats({ productCount, categoryCount }: { productCount: number; category
     { value: Math.max(productCount, 200), suffix: "+", label: "Products" },
     { value: categoryCount, suffix: "+", label: "Categories" },
     { value: 100, suffix: "%", label: "Quality Assured" },
-    { value: 10, suffix: "+", label: "Years of Trust" },
+    { value: SITE.yearsExperience, suffix: "+", label: "Years of Trust" },
   ];
   return (
     <section className="relative -mt-12">
@@ -217,7 +274,8 @@ function Categories({ categories }: { categories: Category[] }) {
           Explore our <span className="text-gradient-brand">complete range</span>
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-          Eight carefully curated categories. Every product hand-picked for freshness and value.
+          A constantly evolving range — refreshed every season with new arrivals
+          and festive specials. Hand-picked for freshness and value.
         </p>
       </motion.div>
 
@@ -331,9 +389,9 @@ function WhyUs() {
   const items = [
     { icon: <Award className="h-6 w-6" />, title: "Quality Products", desc: "Hand-picked from trusted brands, regularly checked for freshness." },
     { icon: <Boxes className="h-6 w-6" />, title: "Wholesale Rates", desc: "Sharp pricing for shopkeepers, retailers and bulk buyers." },
-    { icon: <PackageCheck className="h-6 w-6" />, title: "Wide Product Range", desc: "200+ SKUs spanning eight curated categories — all in one place." },
+    { icon: <PackageCheck className="h-6 w-6" />, title: "Wide Product Range", desc: "200+ SKUs across an ever-evolving range of categories — all in one place." },
     { icon: <Leaf className="h-6 w-6" />, title: "Fresh Stock Daily", desc: "Rotating inventory and seasonal specials, never stale." },
-    { icon: <ShieldCheck className="h-6 w-6" />, title: "Trusted Supplier", desc: "Years of relationships with retailers across the Tricity." },
+    { icon: <ShieldCheck className="h-6 w-6" />, title: "Trusted Supplier", desc: `${SITE.yearsExperience}+ years of relationships with retailers across the Tricity.` },
     { icon: <Truck className="h-6 w-6" />, title: "Premium Packaging", desc: "Travel-safe packing that keeps your stock shelf-ready." },
   ];
   return (
@@ -442,33 +500,3 @@ function Inquiry() {
   );
 }
 
-/* ---------- CONTACT ---------- */
-function ContactBlock() {
-  return (
-    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-      <div className="grid gap-6 lg:grid-cols-3">
-        {[
-          { icon: <Phone className="h-5 w-5" />, title: "Call us", body: SITE.phone, href: `tel:${SITE.phone.replace(/\s/g, "")}` },
-          { icon: <MessageCircle className="h-5 w-5" />, title: "WhatsApp", body: "Quick replies on chat", href: WA },
-          { icon: <Truck className="h-5 w-5" />, title: "We deliver across", body: SITE.address },
-        ].map((c, i) => (
-          <motion.a
-            key={c.title}
-            href={c.href ?? "#"}
-            target={c.href?.startsWith("http") ? "_blank" : undefined}
-            rel="noreferrer"
-            initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.06 }}
-            className="group block rounded-3xl glass p-7 hover-lift hover:shadow-glow"
-          >
-            <div className="grid h-12 w-12 place-items-center rounded-2xl gradient-brand text-white shadow-glow transition group-hover:scale-110">
-              {c.icon}
-            </div>
-            <h3 className="mt-5 font-display text-lg font-bold text-foreground">{c.title}</h3>
-            <p className="mt-1 text-sm text-muted-foreground">{c.body}</p>
-          </motion.a>
-        ))}
-      </div>
-    </section>
-  );
-}
