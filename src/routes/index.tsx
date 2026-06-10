@@ -500,33 +500,3 @@ function Inquiry() {
   );
 }
 
-/* ---------- CONTACT ---------- */
-function ContactBlock() {
-  return (
-    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-      <div className="grid gap-6 lg:grid-cols-3">
-        {[
-          { icon: <Phone className="h-5 w-5" />, title: "Call us", body: SITE.phone, href: `tel:${SITE.phone.replace(/\s/g, "")}` },
-          { icon: <MessageCircle className="h-5 w-5" />, title: "WhatsApp", body: "Quick replies on chat", href: WA },
-          { icon: <Truck className="h-5 w-5" />, title: "We deliver across", body: SITE.address },
-        ].map((c, i) => (
-          <motion.a
-            key={c.title}
-            href={c.href ?? "#"}
-            target={c.href?.startsWith("http") ? "_blank" : undefined}
-            rel="noreferrer"
-            initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.06 }}
-            className="group block rounded-3xl glass p-7 hover-lift hover:shadow-glow"
-          >
-            <div className="grid h-12 w-12 place-items-center rounded-2xl gradient-brand text-white shadow-glow transition group-hover:scale-110">
-              {c.icon}
-            </div>
-            <h3 className="mt-5 font-display text-lg font-bold text-foreground">{c.title}</h3>
-            <p className="mt-1 text-sm text-muted-foreground">{c.body}</p>
-          </motion.a>
-        ))}
-      </div>
-    </section>
-  );
-}
