@@ -92,11 +92,15 @@ function Brands() {
               initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="group relative overflow-hidden rounded-3xl border border-border bg-card p-8 text-center hover-lift hover:shadow-glow"
+              className="group relative overflow-hidden rounded-3xl border border-border bg-card p-6 text-center hover-lift hover:shadow-glow"
             >
               <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full gradient-brand opacity-0 blur-3xl transition group-hover:opacity-20" />
-              <div className="relative mx-auto grid h-40 place-items-center rounded-2xl bg-white p-5">
-                <img src={b.logo} alt={b.name} className="max-h-32 w-auto object-contain transition group-hover:scale-105" />
+              <div className="relative mx-auto grid h-52 place-items-center overflow-hidden rounded-2xl bg-white">
+                <img
+                  src={b.logo}
+                  alt={b.name}
+                  className="h-full w-full object-contain p-2 transition group-hover:scale-105"
+                />
               </div>
               <h3 className="relative mt-6 font-display text-xl font-bold text-foreground">{b.name}</h3>
               <p className="relative mt-1 text-sm text-muted-foreground">{b.tagline}</p>
