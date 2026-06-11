@@ -9,16 +9,16 @@ export function SiteFooter() {
 
       {/* Big logo banner */}
       <div className="relative border-b border-white/10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 text-center">
-          <div className="mx-auto inline-block rounded-3xl bg-white p-6 shadow-glow">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 text-center">
+          <div className="mx-auto inline-block rounded-[2rem] bg-white px-3 py-2 shadow-glow">
             <img
               src={SITE.logo}
               alt="Prince Confectionery Departmental"
-              className="mx-auto h-28 sm:h-36 w-auto object-contain"
+              className="mx-auto h-44 sm:h-56 w-auto object-contain"
             />
           </div>
-          <h2 className="mt-7 font-display text-3xl sm:text-5xl font-extrabold tracking-tight">
-            <span className="text-gradient-warm">Quality You May Rely</span>
+          <h2 className="mt-8 font-display text-4xl sm:text-6xl font-extrabold tracking-tight">
+            <span className="text-shimmer">Quality You May Rely</span>
           </h2>
           <p className="mt-3 text-sm sm:text-base text-white/70 max-w-2xl mx-auto">
             {SITE.yearsExperience}+ years of trust • {SITE.deliveryArea}
