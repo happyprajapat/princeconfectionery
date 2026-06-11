@@ -27,8 +27,20 @@ export const SITE = {
     facebook: "",
   },
   brands: [
-    { name: "Ginni Food Products", tagline: "Pure Vegetarian — Estd. 1986", logo: ginniAsset.url },
-    { name: "Shree Bajrang Food Products", tagline: "Sweet & Namkeen", logo: shreeAsset.url },
-    { name: "Mom's Basket", tagline: "Every bite has mom's love", logo: momsAsset.url },
+    {
+      name: "Ginni Food Products",
+      tagline: "A House of Premium Cookies & Dry Cakes",
+      logo: ginniAsset.url,
+    },
+    {
+      name: "Shree Bajrang Food Products",
+      tagline: "Premium Desi Ghee Gachak & Savoury Delights",
+      logo: shreeAsset.url,
+    },
+    {
+      name: "Mom's Basket",
+      tagline: "Snack Munchies, Bakery & Healthy Treats",
+      logo: momsAsset.url,
+    },
   ],
 };

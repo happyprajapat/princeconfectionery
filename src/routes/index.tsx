@@ -43,9 +43,8 @@ function Home() {
     <SiteShell>
       <ScrollProgress />
       <Hero />
-      <Stats productCount={products.length} categoryCount={categories.length || 8} />
       <Brands />
-      <Categories categories={categories} />
+      <Stats productCount={products.length} categoryCount={categories.length || 8} />
       <FeaturedProducts products={featured} />
       <WhyUs />
       <Inquiry />
@@ -93,11 +92,15 @@ function Brands() {
               initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="group relative overflow-hidden rounded-3xl border border-border bg-card p-8 text-center hover-lift hover:shadow-glow"
+              className="group relative overflow-hidden rounded-3xl border border-border bg-card p-6 text-center hover-lift hover:shadow-glow"
             >
               <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full gradient-brand opacity-0 blur-3xl transition group-hover:opacity-20" />
-              <div className="relative mx-auto grid h-40 place-items-center rounded-2xl bg-white p-5">
-                <img src={b.logo} alt={b.name} className="max-h-32 w-auto object-contain transition group-hover:scale-105" />
+              <div className="relative mx-auto grid h-52 place-items-center overflow-hidden rounded-2xl bg-white">
+                <img
+                  src={b.logo}
+                  alt={b.name}
+                  className="h-full w-full object-contain p-2 transition group-hover:scale-105"
+                />
               </div>
               <h3 className="relative mt-6 font-display text-xl font-bold text-foreground">{b.name}</h3>
               <p className="relative mt-1 text-sm text-muted-foreground">{b.tagline}</p>
@@ -224,15 +227,18 @@ function Stats({ productCount, categoryCount }: { productCount: number; category
     { value: SITE.yearsExperience, suffix: "+", label: "Years of Trust" },
   ];
   return (
-    <section className="relative -mt-12">
+    <section className="relative py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.6 }}
-          className="grid grid-cols-2 gap-3 rounded-3xl glass p-6 shadow-glow sm:grid-cols-4 sm:p-8"
+          className="grid grid-cols-2 gap-3 rounded-3xl border border-border bg-card/60 p-6 shadow-glow backdrop-blur-xl sm:grid-cols-4 sm:p-8"
         >
-          {stats.map((s) => (
-            <div key={s.label} className="text-center">
+          {stats.map((s, i) => (
+            <div
+              key={s.label}
+              className={`text-center ${i !== 0 ? "sm:border-l sm:border-border/60" : ""}`}
+            >
               <p className="font-display text-3xl font-extrabold sm:text-4xl text-gradient-brand">
                 <Counter to={s.value} suffix={s.suffix} />
               </p>

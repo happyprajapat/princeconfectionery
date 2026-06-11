@@ -27,18 +27,30 @@ export function SiteHeader() {
     <header
       className={`sticky top-0 z-40 transition-all ${
         scrolled
-          ? "border-b border-border/60 bg-background/80 backdrop-blur-xl shadow-sm"
+          ? "bg-background/80 backdrop-blur-xl"
           : "bg-background/40 backdrop-blur-md"
       }`}
     >
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link to="/" className="group flex items-center gap-3">
+      <div className="mx-auto grid h-20 max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-2 px-4 sm:px-6 lg:px-8 md:flex md:justify-between">
+        {/* Mobile menu button — left */}
+        <div className="flex md:hidden items-center">
+          <button
+            aria-label="Toggle menu"
+            onClick={() => setOpen((v) => !v)}
+            className="grid h-10 w-10 place-items-center rounded-full text-foreground hover:bg-muted"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
+
+        {/* Logo — centered on mobile, left on desktop */}
+        <Link to="/" className="group flex items-center justify-center md:justify-start gap-3">
           <img
             src={SITE.crown}
             alt=""
-            className="h-12 w-auto object-contain transition group-hover:scale-105 dark:invert dark:brightness-200"
+            className="h-12 w-auto object-contain transition group-hover:scale-105"
           />
-          <div className="hidden sm:block leading-tight">
+          <div className="hidden sm:block leading-tight text-left">
             <div className="font-display text-base font-extrabold tracking-tight text-foreground">
               Prince Confectionery
             </div>
@@ -49,6 +61,7 @@ export function SiteHeader() {
           <span className="sr-only">Prince Confectionery Departmental</span>
         </Link>
 
+        {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-1">
           {nav.map((n) => (
             <Link
@@ -85,7 +98,8 @@ export function SiteHeader() {
           </a>
         </nav>
 
-        <div className="flex md:hidden items-center gap-1">
+        {/* Theme toggle — right on mobile */}
+        <div className="flex md:hidden items-center justify-end">
           <button
             onClick={toggle}
             aria-label="Toggle theme"
@@ -93,18 +107,11 @@ export function SiteHeader() {
           >
             {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
-          <button
-            aria-label="Toggle menu"
-            onClick={() => setOpen((v) => !v)}
-            className="rounded-md p-2 text-foreground hover:bg-muted"
-          >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
         </div>
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-border bg-background/95 backdrop-blur-xl">
+        <div className="md:hidden bg-background/95 backdrop-blur-xl">
           <div className="mx-auto max-w-7xl px-4 py-3 flex flex-col gap-1">
             {nav.map((n) => (
               <Link
