@@ -82,6 +82,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Wholesale namkeen, biscuits, sweets, snacks and confectionery — Tricity." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "Prince Confectionery Departmental" },
+      { name: "twitter:title", content: "Prince Confectionery Departmental" },
+      { property: "og:description", content: "Wholesale namkeen, biscuits, sweets, snacks and confectionery — Tricity." },
+      { name: "twitter:description", content: "Wholesale namkeen, biscuits, sweets, snacks and confectionery — Tricity." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e5f041a3-1f9f-4069-aeff-b6956f239a1f/id-preview-e89c3f4a--5861b5b0-bba3-43e1-ad6c-5dd4b7c33c75.lovable.app-1781168517381.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e5f041a3-1f9f-4069-aeff-b6956f239a1f/id-preview-e89c3f4a--5861b5b0-bba3-43e1-ad6c-5dd4b7c33c75.lovable.app-1781168517381.png" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
