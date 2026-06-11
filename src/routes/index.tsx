@@ -227,15 +227,18 @@ function Stats({ productCount, categoryCount }: { productCount: number; category
     { value: SITE.yearsExperience, suffix: "+", label: "Years of Trust" },
   ];
   return (
-    <section className="relative -mt-12">
+    <section className="relative py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.6 }}
-          className="grid grid-cols-2 gap-3 rounded-3xl glass p-6 shadow-glow sm:grid-cols-4 sm:p-8"
+          className="grid grid-cols-2 gap-3 rounded-3xl border border-border bg-card/60 p-6 shadow-glow backdrop-blur-xl sm:grid-cols-4 sm:p-8"
         >
-          {stats.map((s) => (
-            <div key={s.label} className="text-center">
+          {stats.map((s, i) => (
+            <div
+              key={s.label}
+              className={`text-center ${i !== 0 ? "sm:border-l sm:border-border/60" : ""}`}
+            >
               <p className="font-display text-3xl font-extrabold sm:text-4xl text-gradient-brand">
                 <Counter to={s.value} suffix={s.suffix} />
               </p>
