@@ -43,9 +43,8 @@ function Home() {
     <SiteShell>
       <ScrollProgress />
       <Hero />
-      <Stats productCount={products.length} categoryCount={categories.length || 8} />
       <Brands />
-      <Categories categories={categories} />
+      <Stats productCount={products.length} categoryCount={categories.length || 8} />
       <FeaturedProducts products={featured} />
       <WhyUs />
       <Inquiry />
