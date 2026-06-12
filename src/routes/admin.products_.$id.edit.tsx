@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ProductForm } from "@/components/product-form";
 import type { Product } from "@/lib/catalogue";
 
-export const Route = createFileRoute("/admin/products/$id/edit")({
+export const Route = createFileRoute("/admin/products_/$id/edit")({
   component: EditProduct,
 });
 

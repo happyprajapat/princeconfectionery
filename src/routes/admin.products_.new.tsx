@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { ProductForm } from "@/components/product-form";
 
-export const Route = createFileRoute("/admin/products/new")({
+export const Route = createFileRoute("/admin/products_/new")({
   component: NewProduct,
 });
 
