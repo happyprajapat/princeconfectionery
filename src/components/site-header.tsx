@@ -48,7 +48,7 @@ export function SiteHeader() {
           <img
             src={SITE.crown}
             alt=""
-            className="h-12 w-auto object-contain transition group-hover:scale-105"
+            className="h-10 w-auto object-contain transition group-hover:scale-105 dark:invert"
           />
           <div className="hidden sm:block leading-tight text-left">
             <div className="font-display text-base font-extrabold tracking-tight text-foreground">
