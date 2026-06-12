@@ -20,7 +20,6 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
-import { Route as ApiPublicTestSetupRouteImport } from './routes/api/public/test-setup'
 import { Route as AdminProductsNewRouteImport } from './routes/admin.products_.new'
 import { Route as AdminProductsIdEditRouteImport } from './routes/admin.products_.$id.edit'
 
@@ -79,11 +78,6 @@ const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   path: '/categories',
   getParentRoute: () => AdminRoute,
 } as any)
-const ApiPublicTestSetupRoute = ApiPublicTestSetupRouteImport.update({
-  id: '/api/public/test-setup',
-  path: '/api/public/test-setup',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AdminProductsNewRoute = AdminProductsNewRouteImport.update({
   id: '/products_/new',
   path: '/products/new',
@@ -108,7 +102,6 @@ export interface FileRoutesByFullPath {
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/products/new': typeof AdminProductsNewRoute
-  '/api/public/test-setup': typeof ApiPublicTestSetupRoute
   '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
 }
 export interface FileRoutesByTo {
@@ -123,7 +116,6 @@ export interface FileRoutesByTo {
   '/product/$slug': typeof ProductSlugRoute
   '/admin': typeof AdminIndexRoute
   '/admin/products/new': typeof AdminProductsNewRoute
-  '/api/public/test-setup': typeof ApiPublicTestSetupRoute
   '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
 }
 export interface FileRoutesById {
@@ -140,7 +132,6 @@ export interface FileRoutesById {
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/products_/new': typeof AdminProductsNewRoute
-  '/api/public/test-setup': typeof ApiPublicTestSetupRoute
   '/admin/products_/$id/edit': typeof AdminProductsIdEditRoute
 }
 export interface FileRouteTypes {
@@ -158,7 +149,6 @@ export interface FileRouteTypes {
     | '/product/$slug'
     | '/admin/'
     | '/admin/products/new'
-    | '/api/public/test-setup'
     | '/admin/products/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -173,7 +163,6 @@ export interface FileRouteTypes {
     | '/product/$slug'
     | '/admin'
     | '/admin/products/new'
-    | '/api/public/test-setup'
     | '/admin/products/$id/edit'
   id:
     | '__root__'
@@ -189,7 +178,6 @@ export interface FileRouteTypes {
     | '/product/$slug'
     | '/admin/'
     | '/admin/products_/new'
-    | '/api/public/test-setup'
     | '/admin/products_/$id/edit'
   fileRoutesById: FileRoutesById
 }
@@ -202,7 +190,6 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ProductSlugRoute: typeof ProductSlugRoute
-  ApiPublicTestSetupRoute: typeof ApiPublicTestSetupRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -284,13 +271,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCategoriesRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/api/public/test-setup': {
-      id: '/api/public/test-setup'
-      path: '/api/public/test-setup'
-      fullPath: '/api/public/test-setup'
-      preLoaderRoute: typeof ApiPublicTestSetupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/admin/products_/new': {
       id: '/admin/products_/new'
       path: '/products/new'
@@ -335,8 +315,17 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ProductSlugRoute: ProductSlugRoute,
-  ApiPublicTestSetupRoute: ApiPublicTestSetupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
