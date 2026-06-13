@@ -37,7 +37,8 @@ const fadeUp = {
 function Home() {
   const { data: categories = [] } = useQuery({ queryKey: ["categories"], queryFn: fetchCategories });
   const { data: products = [] } = useQuery({ queryKey: ["products", "visible"], queryFn: fetchVisibleProducts });
-  const featured = products.slice(0, 6);
+  const { data: featuredPicks = [] } = useQuery({ queryKey: ["products", "featured"], queryFn: fetchFeaturedProducts });
+  const featured = (featuredPicks.length > 0 ? featuredPicks : products).slice(0, 6);
 
   return (
     <SiteShell>
