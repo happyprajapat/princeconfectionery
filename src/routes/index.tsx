@@ -8,7 +8,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { SiteShell } from "@/components/site-shell";
 import { SITE } from "@/lib/site";
-import { fetchCategories, fetchVisibleProducts, type Product, type Category } from "@/lib/catalogue";
+import { fetchCategories, fetchVisibleProducts, fetchFeaturedProducts, type Product, type Category } from "@/lib/catalogue";
 
 const WA = `https://wa.me/${SITE.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(
   "Hello Prince Confectionery Departmental, I would like information about your products."
