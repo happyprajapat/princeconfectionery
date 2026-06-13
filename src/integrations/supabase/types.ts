@@ -46,6 +46,7 @@ export type Database = {
           category_id: string | null
           created_at: string
           description: string | null
+          featured_order: number | null
           id: string
           image_url: string | null
           is_seasonal: boolean
@@ -60,6 +61,7 @@ export type Database = {
           category_id?: string | null
           created_at?: string
           description?: string | null
+          featured_order?: number | null
           id?: string
           image_url?: string | null
           is_seasonal?: boolean
@@ -74,6 +76,7 @@ export type Database = {
           category_id?: string | null
           created_at?: string
           description?: string | null
+          featured_order?: number | null
           id?: string
           image_url?: string | null
           is_seasonal?: boolean

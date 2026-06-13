@@ -1,0 +1,2 @@
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS featured_order integer;
+CREATE UNIQUE INDEX IF NOT EXISTS products_featured_order_unique ON public.products(featured_order) WHERE featured_order IS NOT NULL;

@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet, Link, useRouterState, useNavigate, redirect } from "@tanstack/react-router";
-import { LayoutDashboard, Package, FolderTree, LogOut } from "lucide-react";
+import { LayoutDashboard, Package, FolderTree, LogOut, Star } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
@@ -16,6 +16,7 @@ export const Route = createFileRoute("/admin")({
 const nav = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/products", label: "Products", icon: Package, exact: false },
+  { to: "/admin/featured", label: "Home Featured", icon: Star, exact: false },
   { to: "/admin/categories", label: "Categories", icon: FolderTree, exact: false },
 ] as const;
 

@@ -8,7 +8,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { SiteShell } from "@/components/site-shell";
 import { SITE } from "@/lib/site";
-import { fetchCategories, fetchVisibleProducts, type Product, type Category } from "@/lib/catalogue";
+import { fetchCategories, fetchVisibleProducts, fetchFeaturedProducts, type Product, type Category } from "@/lib/catalogue";
 
 const WA = `https://wa.me/${SITE.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(
   "Hello Prince Confectionery Departmental, I would like information about your products."
@@ -37,7 +37,8 @@ const fadeUp = {
 function Home() {
   const { data: categories = [] } = useQuery({ queryKey: ["categories"], queryFn: fetchCategories });
   const { data: products = [] } = useQuery({ queryKey: ["products", "visible"], queryFn: fetchVisibleProducts });
-  const featured = products.slice(0, 6);
+  const { data: featuredPicks = [] } = useQuery({ queryKey: ["products", "featured"], queryFn: fetchFeaturedProducts });
+  const featured = (featuredPicks.length > 0 ? featuredPicks : products).slice(0, 6);
 
   return (
     <SiteShell>
