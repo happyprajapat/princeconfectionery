@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CatalogueRouteImport } from './routes/catalogue'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -21,12 +22,20 @@ import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminFeaturedRouteImport } from './routes/admin.featured'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as AdminProductsNewRouteImport } from './routes/admin.products_.new'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AdminProductsIdEditRouteImport } from './routes/admin.products_.$id.edit'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -84,11 +93,29 @@ const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   path: '/categories',
   getParentRoute: () => AdminRoute,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AdminProductsNewRoute = AdminProductsNewRouteImport.update({
   id: '/products_/new',
   path: '/products/new',
   getParentRoute: () => AdminRoute,
 } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AdminProductsIdEditRoute = AdminProductsIdEditRouteImport.update({
   id: '/products_/$id/edit',
   path: '/products/$id/edit',
@@ -102,12 +129,16 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/catalogue': typeof CatalogueRoute
   '/contact': typeof ContactRoute
+  '/mcp': typeof McpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/featured': typeof AdminFeaturedRoute
   '/admin/products': typeof AdminProductsRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/products/new': typeof AdminProductsNewRoute
   '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
 }
@@ -117,12 +148,16 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/catalogue': typeof CatalogueRoute
   '/contact': typeof ContactRoute
+  '/mcp': typeof McpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/featured': typeof AdminFeaturedRoute
   '/admin/products': typeof AdminProductsRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/products/new': typeof AdminProductsNewRoute
   '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
 }
@@ -134,12 +169,16 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/catalogue': typeof CatalogueRoute
   '/contact': typeof ContactRoute
+  '/mcp': typeof McpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/featured': typeof AdminFeaturedRoute
   '/admin/products': typeof AdminProductsRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/products_/new': typeof AdminProductsNewRoute
   '/admin/products_/$id/edit': typeof AdminProductsIdEditRoute
 }
@@ -152,12 +191,16 @@ export interface FileRouteTypes {
     | '/auth'
     | '/catalogue'
     | '/contact'
+    | '/mcp'
     | '/sitemap.xml'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin/categories'
     | '/admin/featured'
     | '/admin/products'
     | '/product/$slug'
     | '/admin/'
+    | '/.mcp/invoke-tool/$tool'
     | '/admin/products/new'
     | '/admin/products/$id/edit'
   fileRoutesByTo: FileRoutesByTo
@@ -167,12 +210,16 @@ export interface FileRouteTypes {
     | '/auth'
     | '/catalogue'
     | '/contact'
+    | '/mcp'
     | '/sitemap.xml'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin/categories'
     | '/admin/featured'
     | '/admin/products'
     | '/product/$slug'
     | '/admin'
+    | '/.mcp/invoke-tool/$tool'
     | '/admin/products/new'
     | '/admin/products/$id/edit'
   id:
@@ -183,12 +230,16 @@ export interface FileRouteTypes {
     | '/auth'
     | '/catalogue'
     | '/contact'
+    | '/mcp'
     | '/sitemap.xml'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin/categories'
     | '/admin/featured'
     | '/admin/products'
     | '/product/$slug'
     | '/admin/'
+    | '/.mcp/invoke-tool/$tool'
     | '/admin/products_/new'
     | '/admin/products_/$id/edit'
   fileRoutesById: FileRoutesById
@@ -200,8 +251,12 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CatalogueRoute: typeof CatalogueRoute
   ContactRoute: typeof ContactRoute
+  McpRoute: typeof McpRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ProductSlugRoute: typeof ProductSlugRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -211,6 +266,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -290,12 +352,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCategoriesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/products_/new': {
       id: '/admin/products_/new'
       path: '/products/new'
       fullPath: '/admin/products/new'
       preLoaderRoute: typeof AdminProductsNewRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/products_/$id/edit': {
       id: '/admin/products_/$id/edit'
@@ -334,8 +417,13 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CatalogueRoute: CatalogueRoute,
   ContactRoute: ContactRoute,
+  McpRoute: McpRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ProductSlugRoute: ProductSlugRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
