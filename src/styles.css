@@ -49,6 +49,14 @@
   --color-brass: var(--brass);
   --color-ink: var(--ink);
 
+  /* Backward-compat aliases so previously used color classes keep working */
+  --color-violet-c: var(--brass);
+  --color-indigo-c: var(--maroon);
+  --color-amber-c: var(--brass);
+  --color-orange-c: var(--brass);
+  --color-gold-c: var(--brass-2);
+  --color-emerald-c: var(--emerald-c);
+
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
