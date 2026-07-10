@@ -266,7 +266,7 @@ function Editorial() {
         </p>
         <footer className="mt-8 flex items-center gap-4 text-sm">
           <span className="h-px w-12 bg-brass" />
-          <span className="uppercase tracking-[0.24em] text-foreground/70">{SITE.proprietor} — Proprietor</span>
+          <span className="uppercase tracking-[0.24em] text-foreground/70">{SITE.owner} — Proprietor</span>
         </footer>
       </motion.blockquote>
     </section>
