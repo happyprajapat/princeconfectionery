@@ -2,13 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion, useInView, useMotionValue, useTransform, animate, useScroll, useSpring } from "framer-motion";
 import {
-  ArrowRight, Sparkles, Phone, MessageCircle, ShieldCheck, Truck, Award, Boxes, Leaf, PackageCheck,
-  Cookie, Cake, Candy, Wheat, Croissant, Nut, ShoppingBasket, Flame, Star, CheckCircle2, Handshake,
+  ArrowRight, ArrowUpRight, Phone, MessageCircle, ShieldCheck, Truck, Award, Boxes, Leaf, PackageCheck,
+  Star, CheckCircle2, MapPin,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { SiteShell } from "@/components/site-shell";
 import { SITE } from "@/lib/site";
-import { fetchCategories, fetchVisibleProducts, fetchFeaturedProducts, type Product, type Category } from "@/lib/catalogue";
+import { fetchCategories, fetchVisibleProducts, fetchFeaturedProducts, type Product } from "@/lib/catalogue";
 
 const WA = `https://wa.me/${SITE.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(
   "Hello Prince Confectionery Departmental, I would like information about your products."
@@ -26,14 +26,6 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  show: (i = 0) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.6, ease: "easeOut" as const, delay: i * 0.06 },
-  }),
-};
-
 function Home() {
   const { data: categories = [] } = useQuery({ queryKey: ["categories"], queryFn: fetchCategories });
   const { data: products = [] } = useQuery({ queryKey: ["products", "visible"], queryFn: fetchVisibleProducts });
@@ -44,8 +36,10 @@ function Home() {
     <SiteShell>
       <ScrollProgress />
       <Hero />
+      <MarqueeStrip />
       <Brands />
       <Stats productCount={products.length} categoryCount={categories.length || 8} />
+      <Editorial />
       <FeaturedProducts products={featured} />
       <WhyUs />
       <Inquiry />
@@ -59,52 +53,146 @@ function ScrollProgress() {
   return (
     <motion.div
       style={{ scaleX: x, transformOrigin: "0% 50%" }}
-      className="fixed inset-x-0 top-0 z-50 h-[3px] gradient-brand"
+      className="fixed inset-x-0 top-0 z-50 h-[2px] bg-brass"
     />
   );
 }
 
+/* ---------- HERO — Structural Editorial ---------- */
+function Hero() {
+  return (
+    <section className="relative overflow-hidden bg-background">
+      <div className="absolute inset-0 bg-dot-grid opacity-40" aria-hidden />
+      <div className="relative mx-auto max-w-[1400px] px-6 pt-16 pb-20 lg:px-12 lg:pt-24 lg:pb-28">
+        {/* Meta row */}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-maroon-10 pb-4 text-xs">
+          <span className="eyebrow">Est. {new Date().getFullYear() - SITE.yearsExperience} — Chandigarh</span>
+          <span className="hidden sm:inline eyebrow text-foreground/70">Volume 01 · The Wholesale Edit</span>
+          <span className="eyebrow text-foreground/70">Issue N° {String(new Date().getFullYear())}</span>
+        </div>
+
+        <div className="mt-10 grid gap-10 lg:grid-cols-12 lg:gap-16">
+          {/* Left — huge editorial headline */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
+            className="lg:col-span-8"
+          >
+            <p className="eyebrow">The House of Prince — since {new Date().getFullYear() - SITE.yearsExperience}</p>
+            <h1 className="mt-6 font-display font-medium leading-[0.9] tracking-[-0.04em] text-[clamp(3rem,9vw,8.5rem)] text-foreground">
+              Namkeen.
+              <br />
+              <span className="italic font-light">Mithai.</span>
+              <br />
+              <span className="text-brass">Bakery.</span>
+            </h1>
+
+            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+              <Link
+                to="/catalogue"
+                className="group inline-flex items-center gap-3 bg-maroon px-7 py-4 text-sm font-medium tracking-wide text-[color:var(--cream)] transition hover:bg-[color:var(--maroon-2)]"
+              >
+                Open the catalogue
+                <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </Link>
+              <a
+                href={WA} target="_blank" rel="noreferrer"
+                className="group inline-flex items-center gap-2 border-b border-foreground/40 pb-1 text-sm font-medium text-foreground transition hover:border-brass hover:text-brass"
+              >
+                <MessageCircle className="h-4 w-4" /> Message on WhatsApp
+              </a>
+            </div>
+          </motion.div>
+
+          {/* Right — editorial column */}
+          <motion.aside
+            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.15 }}
+            className="lg:col-span-4 lg:pl-8 lg:border-l lg:border-maroon-10 flex flex-col justify-between gap-8"
+          >
+            <div>
+              <span className="eyebrow">The house note</span>
+              <p className="mt-4 font-display text-2xl leading-snug tracking-tight text-foreground text-balance">
+                A wholesale supply house curating <span className="italic">200+ premium products</span> for shopkeepers, kirana stores and hotels across the Tricity.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-6">
+              <MetaBlock label="Delivered" value="Tricity" />
+              <MetaBlock label="Legacy" value={`${SITE.yearsExperience}+ yrs`} />
+              <MetaBlock label="Products" value="200+" />
+              <MetaBlock label="Range" value="Seasonal" />
+            </div>
+          </motion.aside>
+        </div>
+
+        {/* Bottom rule + running signals */}
+        <div className="mt-16 border-t border-maroon-10 pt-4 flex flex-wrap items-center justify-between gap-4 text-[11px] uppercase tracking-[0.24em] text-foreground/60">
+          <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-brass" /> Wholesale rates</span>
+          <span className="hidden sm:inline-flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-brass" /> Retail welcome</span>
+          <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-brass" /> Fresh stock daily</span>
+          <span className="hidden md:inline-flex items-center gap-2"><MapPin className="h-3.5 w-3.5 text-brass" /> Chandigarh · Mohali · Panchkula</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function MetaBlock({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <div className="eyebrow text-foreground/60">{label}</div>
+      <div className="mt-1 font-display text-xl text-foreground">{value}</div>
+    </div>
+  );
+}
+
+/* ---------- MARQUEE STRIP ---------- */
+function MarqueeStrip() {
+  const words = ["Namkeen", "Biscuits", "Sweets", "Snacks", "Roasted", "Bakery", "Rusk", "Dry Fruits", "Grocery", "Confectionery"];
+  const row = [...words, ...words];
+  return (
+    <div className="border-y border-maroon-10 bg-[color:var(--cream-2)] py-5 overflow-hidden">
+      <div className="flex gap-12 animate-marquee whitespace-nowrap">
+        {row.map((w, i) => (
+          <span key={i} className="font-display text-2xl md:text-3xl font-light italic text-foreground/70 inline-flex items-center gap-12">
+            {w}
+            <span className="h-1.5 w-1.5 rounded-full bg-brass" />
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- BRANDS — numbered editorial ---------- */
 function Brands() {
   return (
-    <section className="relative overflow-hidden py-24">
-      <div className="absolute inset-0 gradient-brand-soft" aria-hidden />
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ duration: 0.6 }}
-          className="text-center"
-        >
-          <span className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-foreground/80 shadow-sm">
-            <Handshake className="h-3.5 w-3.5 text-violet-c" /> Authorized distributor
-          </span>
-          <h2 className="mt-5 font-display text-4xl font-extrabold sm:text-5xl">
-            Premier distributors of <span className="text-gradient-brand">trusted brands</span>
+    <section className="relative mx-auto max-w-[1400px] px-6 lg:px-12 py-24">
+      <div className="grid gap-6 lg:grid-cols-12">
+        <div className="lg:col-span-4">
+          <p className="eyebrow">Section 01 — Distributions</p>
+          <h2 className="mt-4 font-display text-4xl sm:text-5xl leading-[1] tracking-[-0.03em] text-foreground">
+            Authorised distributor of <span className="italic">three iconic</span> food brands.
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
-            Proud authorized distributor of three iconic food brands across Tricity —
-            Chandigarh, Mohali & Panchkula.
+          <p className="mt-5 max-w-sm text-sm text-muted-foreground leading-relaxed">
+            Proud to represent these houses across Chandigarh, Mohali & Panchkula — bringing their signature products to your shelves.
           </p>
-        </motion.div>
-
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
+        </div>
+        <div className="lg:col-span-8 grid gap-px bg-[color:var(--border)] border border-maroon-10 sm:grid-cols-3">
           {SITE.brands.map((b, i) => (
             <motion.div
               key={b.name}
-              initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="group relative overflow-hidden rounded-3xl border border-border bg-card p-6 text-center hover-lift hover:shadow-glow"
+              initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }} transition={{ duration: 0.6, delay: i * 0.08 }}
+              className="group relative bg-background p-6 flex flex-col"
             >
-              <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full gradient-brand opacity-0 blur-3xl transition group-hover:opacity-20" />
-              <div className="relative mx-auto grid h-52 place-items-center overflow-hidden rounded-2xl bg-white">
-                <img
-                  src={b.logo}
-                  alt={b.name}
-                  className="h-full w-full object-contain p-2 transition group-hover:scale-105"
-                />
+              <div className="flex items-baseline justify-between">
+                <span className="font-display text-xs tracking-[0.3em] text-brass">0{i + 1}</span>
+                <ArrowUpRight className="h-4 w-4 text-foreground/40 transition group-hover:text-brass group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </div>
-              <h3 className="relative mt-6 font-display text-xl font-bold text-foreground">{b.name}</h3>
-              <p className="relative mt-1 text-sm text-muted-foreground">{b.tagline}</p>
+              <div className="mt-6 aspect-square w-full grid place-items-center overflow-hidden bg-white rounded-sm">
+                <img src={b.logo} alt={b.name} className="h-full w-full object-contain p-4 transition duration-500 group-hover:scale-105" />
+              </div>
+              <h3 className="mt-5 font-display text-lg text-foreground leading-tight">{b.name}</h3>
+              <p className="mt-1 text-xs text-muted-foreground">{b.tagline}</p>
             </motion.div>
           ))}
         </div>
@@ -113,98 +201,7 @@ function Brands() {
   );
 }
 
-/* ---------- HERO ---------- */
-function Hero() {
-  return (
-    <section className="relative overflow-hidden">
-      {/* animated gradient mesh background */}
-      <div className="absolute inset-0 bg-mesh animate-gradient" aria-hidden />
-      <div className="absolute inset-0 bg-dot-grid opacity-40" aria-hidden />
-
-      {/* floating decorative shapes */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-        <div className="absolute -top-20 -left-20 h-72 w-72 rounded-full gradient-brand opacity-20 blur-3xl animate-float-slow" />
-        <div className="absolute top-40 -right-24 h-80 w-80 rounded-full gradient-warm opacity-25 blur-3xl animate-float" />
-        <div className="absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-violet-c/20 blur-3xl animate-float-slow" />
-        <FloatingIcon className="left-[8%] top-[22%]" delay={0}><Cookie className="h-6 w-6" /></FloatingIcon>
-        <FloatingIcon className="right-[10%] top-[18%]" delay={1.2}><Candy className="h-6 w-6" /></FloatingIcon>
-        <FloatingIcon className="left-[14%] bottom-[18%]" delay={2}><Cake className="h-6 w-6" /></FloatingIcon>
-        <FloatingIcon className="right-[16%] bottom-[24%]" delay={0.6}><Nut className="h-6 w-6" /></FloatingIcon>
-      </div>
-
-      <div className="relative mx-auto max-w-7xl px-4 pt-20 pb-28 sm:px-6 lg:px-8 lg:pt-28 lg:pb-36 text-center">
-        <motion.div initial="hidden" animate="show" variants={fadeUp}>
-          <span className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-foreground/80 shadow-sm">
-            <Sparkles className="h-3.5 w-3.5 text-violet-c" />
-            Tricity's Premium Confectionery House
-          </span>
-        </motion.div>
-
-        <motion.h1
-          initial="hidden" animate="show" custom={1} variants={fadeUp}
-          className="mt-6 font-display text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl text-balance"
-        >
-          <span className="text-gradient-brand">Prince Confectionery</span>
-          <br />
-          <span className="text-foreground">Departmental</span>
-        </motion.h1>
-
-        <motion.p
-          initial="hidden" animate="show" custom={2} variants={fadeUp}
-          className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl text-balance"
-        >
-          Premium <span className="text-gradient-warm font-semibold">Namkeen, Bakery, Sweets & Snacks</span> for
-          retail and wholesale customers — curated from 200+ trusted products.
-        </motion.p>
-
-        <motion.div
-          initial="hidden" animate="show" custom={3} variants={fadeUp}
-          className="mt-9 flex flex-wrap justify-center gap-3"
-        >
-          <Link
-            to="/catalogue"
-            className="group inline-flex items-center gap-2 rounded-full gradient-brand px-7 py-3.5 text-sm font-semibold text-white shadow-glow transition hover:scale-105"
-          >
-            Browse Products
-            <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-          </Link>
-          <a
-            href={WA}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-full glass px-7 py-3.5 text-sm font-semibold text-foreground transition hover:scale-105"
-          >
-            <MessageCircle className="h-4 w-4 text-emerald" /> Contact on WhatsApp
-          </a>
-        </motion.div>
-
-        <motion.div
-          initial="hidden" animate="show" custom={4} variants={fadeUp}
-          className="mt-12 flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs font-medium text-muted-foreground"
-        >
-          {["Wholesale rates", "Retail welcome", "Fresh stock daily", "Tricity delivery"].map((t) => (
-            <span key={t} className="inline-flex items-center gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald" /> {t}
-            </span>
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-function FloatingIcon({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
-  return (
-    <div
-      className={`absolute hidden md:grid h-12 w-12 place-items-center rounded-2xl glass text-violet-c shadow-glow animate-float ${className}`}
-      style={{ animationDelay: `${delay}s` }}
-    >
-      {children}
-    </div>
-  );
-}
-
-/* ---------- STATS ---------- */
+/* ---------- STATS — editorial ledger ---------- */
 function Counter({ to, suffix = "", duration = 1.6 }: { to: number; suffix?: string; duration?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
@@ -222,129 +219,91 @@ function Counter({ to, suffix = "", duration = 1.6 }: { to: number; suffix?: str
 
 function Stats({ productCount, categoryCount }: { productCount: number; categoryCount: number }) {
   const stats = [
+    { value: SITE.yearsExperience, suffix: "+", label: "Years of Trust" },
     { value: Math.max(productCount, 200), suffix: "+", label: "Products" },
     { value: categoryCount, suffix: "+", label: "Categories" },
-    { value: 100, suffix: "%", label: "Quality Assured" },
-    { value: SITE.yearsExperience, suffix: "+", label: "Years of Trust" },
+    { value: 3, suffix: "", label: "Cities Served" },
   ];
   return (
-    <section className="relative py-16 sm:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ duration: 0.6 }}
-          className="grid grid-cols-2 gap-3 rounded-3xl border border-border bg-card/60 p-6 shadow-glow backdrop-blur-xl sm:grid-cols-4 sm:p-8"
-        >
+    <section className="bg-maroon text-[color:var(--cream)]">
+      <div className="mx-auto max-w-[1400px] px-6 lg:px-12 py-20">
+        <div className="flex items-baseline justify-between border-b border-[color:var(--cream)]/20 pb-4">
+          <p className="eyebrow text-brass">Section 02 — The Ledger</p>
+          <span className="text-xs tracking-[0.28em] uppercase opacity-60">By the numbers</span>
+        </div>
+        <div className="mt-10 grid grid-cols-2 md:grid-cols-4 divide-x divide-[color:var(--cream)]/15">
           {stats.map((s, i) => (
-            <div
-              key={s.label}
-              className={`text-center ${i !== 0 ? "sm:border-l sm:border-border/60" : ""}`}
-            >
-              <p className="font-display text-3xl font-extrabold sm:text-4xl text-gradient-brand">
-                <Counter to={s.value} suffix={s.suffix} />
-              </p>
-              <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{s.label}</p>
-            </div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-/* ---------- CATEGORIES ---------- */
-const CATEGORY_VISUAL: Record<string, { icon: React.ReactNode; gradient: string }> = {
-  "namkeen":          { icon: <Flame className="h-6 w-6" />,            gradient: "from-orange-500 via-red-500 to-rose-500" },
-  "biscuits":         { icon: <Cookie className="h-6 w-6" />,           gradient: "from-amber-500 via-orange-500 to-red-500" },
-  "sweets":           { icon: <Candy className="h-6 w-6" />,            gradient: "from-pink-500 via-fuchsia-500 to-violet-500" },
-  "snacks":           { icon: <Flame className="h-6 w-6" />,            gradient: "from-yellow-500 via-amber-500 to-orange-500" },
-  "roasted-items":    { icon: <Nut className="h-6 w-6" />,              gradient: "from-amber-600 via-orange-600 to-rose-600" },
-  "roasted-snacks":   { icon: <Nut className="h-6 w-6" />,              gradient: "from-amber-600 via-orange-600 to-rose-600" },
-  "confectionery":    { icon: <Candy className="h-6 w-6" />,            gradient: "from-violet-500 via-purple-500 to-fuchsia-500" },
-  "dry-cakes":        { icon: <Cake className="h-6 w-6" />,             gradient: "from-rose-500 via-pink-500 to-fuchsia-500" },
-  "bakery-products":  { icon: <Croissant className="h-6 w-6" />,        gradient: "from-amber-400 via-orange-500 to-rose-500" },
-  "rusk":             { icon: <Wheat className="h-6 w-6" />,            gradient: "from-yellow-600 via-amber-600 to-orange-600" },
-  "dry-fruits":       { icon: <Nut className="h-6 w-6" />,              gradient: "from-emerald-500 via-teal-500 to-cyan-500" },
-  "grocery":          { icon: <ShoppingBasket className="h-6 w-6" />,   gradient: "from-blue-500 via-indigo-500 to-violet-500" },
-};
-
-function Categories({ categories }: { categories: Category[] }) {
-  return (
-    <section className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-      <motion.div
-        initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }} transition={{ duration: 0.5 }}
-        className="text-center"
-      >
-        <p className="text-xs font-bold uppercase tracking-[0.22em] text-violet-c">Shop by category</p>
-        <h2 className="mt-3 font-display text-4xl font-extrabold sm:text-5xl">
-          Explore our <span className="text-gradient-brand">complete range</span>
-        </h2>
-        <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-          A constantly evolving range — refreshed every season with new arrivals
-          and festive specials. Hand-picked for freshness and value.
-        </p>
-      </motion.div>
-
-      <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-        {categories.map((c, i) => {
-          const v = CATEGORY_VISUAL[c.slug] ?? { icon: <Boxes className="h-6 w-6" />, gradient: "from-indigo-500 via-violet-500 to-fuchsia-500" };
-          return (
             <motion.div
-              key={c.id}
+              key={s.label}
               initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: i * 0.05 }}
+              viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.08 }}
+              className="px-6 first:pl-0"
             >
-              <Link
-                to="/catalogue"
-                search={{ category: c.slug }}
-                className="group relative block overflow-hidden rounded-3xl border border-border bg-card p-6 hover-lift hover:shadow-glow"
-              >
-                <div className={`absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br ${v.gradient} opacity-20 blur-2xl transition group-hover:opacity-50 group-hover:scale-125`} />
-                <div className={`relative grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br ${v.gradient} text-white shadow-glow transition group-hover:scale-110 group-hover:rotate-6`}>
-                  {v.icon}
-                </div>
-                <h3 className="relative mt-5 font-display text-lg font-bold text-foreground">{c.name}</h3>
-                <p className="relative mt-1 text-xs text-muted-foreground">Explore range</p>
-                <ArrowRight className="relative mt-4 h-4 w-4 text-violet-c opacity-0 transition group-hover:opacity-100 group-hover:translate-x-1" />
-              </Link>
+              <div className="font-display text-6xl md:text-7xl font-light tracking-[-0.04em] text-brass">
+                <Counter to={s.value} suffix={s.suffix} />
+              </div>
+              <div className="mt-3 text-xs uppercase tracking-[0.24em] opacity-80">{s.label}</div>
             </motion.div>
-          );
-        })}
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
-/* ---------- FEATURED ---------- */
-function FeaturedProducts({ products }: { products: Product[] }) {
+/* ---------- EDITORIAL PULL QUOTE ---------- */
+function Editorial() {
   return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 gradient-brand-soft" aria-hidden />
-      <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-        <div className="flex flex-wrap items-end justify-between gap-4">
+    <section className="relative mx-auto max-w-[1200px] px-6 lg:px-12 py-24">
+      <motion.blockquote
+        initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }} transition={{ duration: 0.8 }}
+        className="relative"
+      >
+        <span aria-hidden className="absolute -top-4 -left-2 font-display text-[8rem] leading-none text-brass/40 select-none">"</span>
+        <p className="relative font-display text-3xl sm:text-4xl md:text-5xl font-light leading-tight tracking-[-0.02em] text-foreground text-balance">
+          Every festival, every counter, every kirana shelf across the Tricity — <span className="italic text-brass">we've been there for {SITE.yearsExperience} years.</span>
+        </p>
+        <footer className="mt-8 flex items-center gap-4 text-sm">
+          <span className="h-px w-12 bg-brass" />
+          <span className="uppercase tracking-[0.24em] text-foreground/70">{SITE.owner} — Proprietor</span>
+        </footer>
+      </motion.blockquote>
+    </section>
+  );
+}
+
+/* ---------- FEATURED — magazine grid ---------- */
+function FeaturedProducts({ products }: { products: Product[] }) {
+  const [cover, ...rest] = products;
+  return (
+    <section className="relative bg-[color:var(--cream-2)]">
+      <div className="mx-auto max-w-[1400px] px-6 lg:px-12 py-24">
+        <div className="flex flex-wrap items-end justify-between gap-4 border-b border-maroon-10 pb-6">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-violet-c">Featured</p>
-            <h2 className="mt-3 font-display text-4xl font-extrabold sm:text-5xl">
-              Customer <span className="text-gradient-warm">favourites</span>
+            <p className="eyebrow">Section 03 — House Picks</p>
+            <h2 className="mt-3 font-display text-4xl sm:text-5xl tracking-[-0.03em]">
+              Customer <span className="italic">favourites</span>
             </h2>
           </div>
-          <Link to="/catalogue" className="inline-flex items-center gap-1 text-sm font-semibold text-violet-c hover:underline">
-            View all <ArrowRight className="h-4 w-4" />
+          <Link to="/catalogue" className="inline-flex items-center gap-1 text-sm font-medium text-foreground hover:text-brass border-b border-foreground/40 hover:border-brass pb-1">
+            Browse all products <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
         {products.length === 0 ? (
-          <div className="mt-10 rounded-3xl border border-dashed border-border bg-card p-12 text-center">
+          <div className="mt-10 border border-dashed border-maroon-10 p-12 text-center">
             <p className="text-sm text-muted-foreground">Products will appear here once added from the admin panel.</p>
-            <Link to="/auth" className="mt-3 inline-block text-sm font-semibold text-violet-c hover:underline">
+            <Link to="/auth" className="mt-3 inline-block text-sm font-semibold text-brass hover:underline">
               Sign in to add products →
             </Link>
           </div>
         ) : (
-          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-3">
-            {products.map((p, i) => <FeaturedCard key={p.id} p={p} i={i} />)}
+          <div className="mt-12 grid gap-8 lg:grid-cols-12">
+            {cover && <CoverCard p={cover} />}
+            <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-6">
+              {rest.map((p, i) => <SmallCard key={p.id} p={p} i={i} />)}
+            </div>
           </div>
         )}
       </div>
@@ -352,79 +311,106 @@ function FeaturedProducts({ products }: { products: Product[] }) {
   );
 }
 
-function FeaturedCard({ p, i }: { p: Product; i: number }) {
+function CoverCard({ p }: { p: Product }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }} transition={{ duration: 0.5, delay: i * 0.06 }}
+      initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }} transition={{ duration: 0.7 }}
+      className="lg:col-span-5"
     >
-      <Link
-        to="/product/$slug" params={{ slug: p.slug }}
-        className="group block overflow-hidden rounded-3xl border border-border bg-card hover-lift hover:shadow-glow"
-      >
-        <div className="relative aspect-square overflow-hidden bg-muted">
+      <Link to="/product/$slug" params={{ slug: p.slug }} className="group block">
+        <div className="relative aspect-[4/5] overflow-hidden bg-background">
           {p.image_url ? (
-            <img src={p.image_url} alt={p.name} loading="lazy"
-                 className="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
+            <img src={p.image_url} alt={p.name} className="h-full w-full object-cover transition duration-1000 group-hover:scale-105" />
           ) : (
-            <div className="grid h-full w-full place-items-center font-display text-4xl text-muted-foreground/30 gradient-brand-soft">P</div>
+            <div className="grid h-full w-full place-items-center font-display text-8xl text-brass/40">P</div>
           )}
+          <span className="absolute left-4 top-4 eyebrow bg-background/90 px-3 py-1.5">Cover Pick</span>
           {p.is_seasonal && (
-            <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full gradient-warm px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-glow-warm">
+            <span className="absolute right-4 top-4 inline-flex items-center gap-1 bg-brass px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-maroon">
               <Star className="h-3 w-3" /> {p.season_label || "Seasonal"}
             </span>
           )}
-          <div className="absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-black/70 to-transparent p-4 transition group-hover:translate-y-0">
-            <span className="inline-flex items-center gap-1 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-foreground">
-              View details <ArrowRight className="h-3 w-3" />
-            </span>
-          </div>
         </div>
-        <div className="p-4">
-          <h3 className="font-display text-base font-bold text-foreground line-clamp-1">{p.name}</h3>
-          {p.pack_sizes.length > 0 && (
-            <p className="mt-1 text-xs text-muted-foreground line-clamp-1">{p.pack_sizes.join(" • ")}</p>
-          )}
+        <div className="mt-5 flex items-start justify-between gap-4">
+          <div>
+            <h3 className="font-display text-2xl leading-tight text-foreground">{p.name}</h3>
+            {p.pack_sizes.length > 0 && (
+              <p className="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">{p.pack_sizes.join(" · ")}</p>
+            )}
+          </div>
+          <ArrowUpRight className="h-5 w-5 text-foreground transition group-hover:text-brass group-hover:-translate-y-0.5 group-hover:translate-x-0.5 shrink-0 mt-1" />
         </div>
       </Link>
     </motion.div>
   );
 }
 
-/* ---------- WHY US ---------- */
+function SmallCard({ p, i }: { p: Product; i: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }} transition={{ duration: 0.5, delay: i * 0.06 }}
+    >
+      <Link to="/product/$slug" params={{ slug: p.slug }} className="group block">
+        <div className="relative aspect-square overflow-hidden bg-background">
+          {p.image_url ? (
+            <img src={p.image_url} alt={p.name} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+          ) : (
+            <div className="grid h-full w-full place-items-center font-display text-4xl text-brass/40">P</div>
+          )}
+          {p.is_seasonal && (
+            <span className="absolute left-2 top-2 bg-brass px-2 py-0.5 text-[9px] font-semibold uppercase tracking-widest text-maroon">
+              {p.season_label || "Seasonal"}
+            </span>
+          )}
+        </div>
+        <h3 className="mt-3 font-display text-sm text-foreground line-clamp-1">{p.name}</h3>
+        {p.pack_sizes.length > 0 && (
+          <p className="mt-0.5 text-[10px] uppercase tracking-[0.18em] text-muted-foreground line-clamp-1">{p.pack_sizes.join(" · ")}</p>
+        )}
+      </Link>
+    </motion.div>
+  );
+}
+
+/* ---------- WHY US — editorial list ---------- */
 function WhyUs() {
   const items = [
-    { icon: <Award className="h-6 w-6" />, title: "Quality Products", desc: "Hand-picked from trusted brands, regularly checked for freshness." },
-    { icon: <Boxes className="h-6 w-6" />, title: "Wholesale Rates", desc: "Sharp pricing for shopkeepers, retailers and bulk buyers." },
-    { icon: <PackageCheck className="h-6 w-6" />, title: "Wide Product Range", desc: "200+ SKUs across an ever-evolving range of categories — all in one place." },
-    { icon: <Leaf className="h-6 w-6" />, title: "Fresh Stock Daily", desc: "Rotating inventory and seasonal specials, never stale." },
-    { icon: <ShieldCheck className="h-6 w-6" />, title: "Trusted Supplier", desc: `${SITE.yearsExperience}+ years of relationships with retailers across the Tricity.` },
-    { icon: <Truck className="h-6 w-6" />, title: "Premium Packaging", desc: "Travel-safe packing that keeps your stock shelf-ready." },
+    { icon: <Award className="h-5 w-5" />, title: "Quality Products", desc: "Hand-picked from trusted brands, regularly checked for freshness." },
+    { icon: <Boxes className="h-5 w-5" />, title: "Wholesale Rates", desc: "Sharp pricing for shopkeepers, retailers and bulk buyers." },
+    { icon: <PackageCheck className="h-5 w-5" />, title: "Wide Range", desc: "200+ SKUs across an ever-evolving range of categories — all in one place." },
+    { icon: <Leaf className="h-5 w-5" />, title: "Fresh Stock Daily", desc: "Rotating inventory and seasonal specials, never stale." },
+    { icon: <ShieldCheck className="h-5 w-5" />, title: "Trusted Supplier", desc: `${SITE.yearsExperience}+ years of relationships with retailers across Tricity.` },
+    { icon: <Truck className="h-5 w-5" />, title: "Premium Packaging", desc: "Travel-safe packing that keeps your stock shelf-ready." },
   ];
   return (
-    <section className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-      <div className="text-center">
-        <p className="text-xs font-bold uppercase tracking-[0.22em] text-violet-c">Why choose us</p>
-        <h2 className="mt-3 font-display text-4xl font-extrabold sm:text-5xl">
-          Built on <span className="text-gradient-brand">trust & taste</span>
-        </h2>
-      </div>
-      <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((it, i) => (
-          <motion.div
-            key={it.title}
-            initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }} transition={{ duration: 0.5, delay: i * 0.05 }}
-            className="group relative overflow-hidden rounded-3xl border border-border bg-card p-7 hover-lift hover:shadow-glow"
-          >
-            <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full gradient-brand opacity-0 blur-2xl transition group-hover:opacity-20" />
-            <div className="relative grid h-12 w-12 place-items-center rounded-2xl gradient-brand text-white shadow-glow transition group-hover:scale-110">
-              {it.icon}
-            </div>
-            <h3 className="relative mt-5 font-display text-lg font-bold text-foreground">{it.title}</h3>
-            <p className="relative mt-2 text-sm text-muted-foreground leading-relaxed">{it.desc}</p>
-          </motion.div>
-        ))}
+    <section className="relative mx-auto max-w-[1400px] px-6 lg:px-12 py-24">
+      <div className="grid gap-10 lg:grid-cols-12">
+        <div className="lg:col-span-4">
+          <p className="eyebrow">Section 04 — Why Prince</p>
+          <h2 className="mt-4 font-display text-4xl sm:text-5xl leading-[1] tracking-[-0.03em]">
+            Built on <span className="italic">trust</span> & <span className="text-brass">taste.</span>
+          </h2>
+        </div>
+        <ul className="lg:col-span-8 grid gap-px bg-[color:var(--border)] border border-maroon-10 sm:grid-cols-2">
+          {items.map((it, i) => (
+            <motion.li
+              key={it.title}
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }} transition={{ duration: 0.5, delay: i * 0.05 }}
+              className="bg-background p-7"
+            >
+              <div className="flex items-center gap-3">
+                <span className="font-display text-xs tracking-[0.3em] text-brass">0{i + 1}</span>
+                <span className="h-px flex-1 bg-maroon/10" />
+                <span className="text-foreground/60">{it.icon}</span>
+              </div>
+              <h3 className="mt-6 font-display text-xl text-foreground">{it.title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{it.desc}</p>
+            </motion.li>
+          ))}
+        </ul>
       </div>
     </section>
   );
@@ -451,59 +437,61 @@ function Inquiry() {
   };
 
   const inputCls =
-    "w-full rounded-xl border border-border bg-background/80 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-violet-c focus:outline-none focus:ring-4 focus:ring-violet-c/15";
+    "w-full border-0 border-b border-[color:var(--cream)]/25 bg-transparent px-0 py-3 text-sm text-[color:var(--cream)] placeholder:text-[color:var(--cream)]/50 transition focus:border-brass focus:outline-none focus:ring-0";
 
   return (
-    <section className="relative overflow-hidden py-24">
-      <div className="absolute inset-0 bg-navy" aria-hidden />
-      <div className="absolute inset-0 bg-mesh opacity-40 animate-gradient" aria-hidden />
-      <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ duration: 0.6 }}
-          className="grid gap-10 lg:grid-cols-[1fr_1.2fr] items-stretch"
-        >
-          <div className="text-white">
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-amber">Wholesale inquiry</p>
-            <h2 className="mt-3 font-display text-4xl font-extrabold sm:text-5xl">
-              Let's talk <span className="text-gradient-warm">business.</span>
+    <section className="relative overflow-hidden bg-ink text-[color:var(--cream)]">
+      <div className="relative mx-auto max-w-[1400px] px-6 lg:px-12 py-24">
+        <div className="grid gap-12 lg:grid-cols-12">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ duration: 0.6 }}
+            className="lg:col-span-5"
+          >
+            <p className="eyebrow">Section 05 — Correspondence</p>
+            <h2 className="mt-4 font-display text-5xl sm:text-6xl leading-[0.95] tracking-[-0.03em]">
+              Let's talk <span className="italic text-brass">business.</span>
             </h2>
-            <p className="mt-4 text-white/70 leading-relaxed">
-              Tell us what you need. We'll get back with rates, availability and packaging options — usually within the same day.
+            <p className="mt-6 text-[color:var(--cream)]/70 leading-relaxed max-w-sm">
+              Tell us what you need. We'll get back with rates, availability and packaging — usually within the same day.
             </p>
-            <div className="mt-8 space-y-3">
-              <a href={`tel:${SITE.phone.replace(/\s/g, "")}`} className="flex items-center gap-3 rounded-2xl glass-dark px-4 py-3 text-sm text-white transition hover:bg-white/10">
-                <span className="grid h-9 w-9 place-items-center rounded-xl gradient-warm"><Phone className="h-4 w-4" /></span>
-                {SITE.phone}
+            <div className="mt-10 space-y-4 text-sm">
+              <a href={`tel:${SITE.phone.replace(/\s/g, "")}`} className="flex items-center gap-4 border-b border-[color:var(--cream)]/15 pb-4 hover:text-brass transition">
+                <Phone className="h-4 w-4 text-brass" /> {SITE.phone}
               </a>
-              <a href={WA} target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-2xl glass-dark px-4 py-3 text-sm text-white transition hover:bg-white/10">
-                <span className="grid h-9 w-9 place-items-center rounded-xl" style={{ background: "linear-gradient(135deg,#25D366,#128C7E)" }}><MessageCircle className="h-4 w-4" /></span>
-                Chat on WhatsApp
+              <a href={WA} target="_blank" rel="noreferrer" className="flex items-center gap-4 border-b border-[color:var(--cream)]/15 pb-4 hover:text-brass transition">
+                <MessageCircle className="h-4 w-4 text-brass" /> {SITE.whatsapp}
               </a>
+              <div className="flex items-center gap-4 border-b border-[color:var(--cream)]/15 pb-4">
+                <MapPin className="h-4 w-4 text-brass" /> Delivered across Chandigarh · Mohali · Panchkula
+              </div>
             </div>
-          </div>
+          </motion.div>
 
-          <form onSubmit={onSubmit} className="rounded-3xl glass p-6 shadow-glow sm:p-8">
-            <div className="grid gap-4 sm:grid-cols-2">
+          <motion.form
+            initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }}
+            onSubmit={onSubmit} className="lg:col-span-7 lg:pl-12 lg:border-l lg:border-[color:var(--cream)]/15"
+          >
+            <div className="grid gap-6 sm:grid-cols-2">
               <input required maxLength={80} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Your name" className={inputCls} />
               <input required maxLength={15} value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} placeholder="Mobile number" className={inputCls} inputMode="tel" />
               <input maxLength={120} value={form.business} onChange={(e) => setForm({ ...form, business: e.target.value })} placeholder="Business / shop name" className={`${inputCls} sm:col-span-2`} />
               <input maxLength={200} value={form.products} onChange={(e) => setForm({ ...form, products: e.target.value })} placeholder="Products required (e.g. Kaju Patisa 5kg)" className={`${inputCls} sm:col-span-2`} />
-              <textarea maxLength={500} rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Anything else?" className={`${inputCls} sm:col-span-2 resize-none`} />
+              <textarea maxLength={500} rows={3} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Anything else?" className={`${inputCls} sm:col-span-2 resize-none`} />
             </div>
             <button
               type="submit" disabled={submitting}
-              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full gradient-brand px-6 py-3.5 text-sm font-semibold text-white shadow-glow transition hover:scale-[1.02] disabled:opacity-60"
+              className="mt-8 inline-flex items-center justify-center gap-3 bg-brass px-8 py-4 text-sm font-medium tracking-wide text-maroon transition hover:bg-[color:var(--brass-2)] disabled:opacity-60"
             >
-              {submitting ? "Opening WhatsApp…" : (<>Send Inquiry <ArrowRight className="h-4 w-4" /></>)}
+              {submitting ? "Opening WhatsApp…" : (<>Send Inquiry <ArrowUpRight className="h-4 w-4" /></>)}
             </button>
-            <p className="mt-3 text-center text-[11px] text-muted-foreground">
-              Your inquiry opens in WhatsApp — fastest way to reach us.
+            <p className="mt-4 text-[11px] uppercase tracking-[0.24em] text-[color:var(--cream)]/50">
+              Your inquiry opens in WhatsApp — the fastest way to reach us.
             </p>
-          </form>
-        </motion.div>
+          </motion.form>
+        </div>
       </div>
     </section>
   );
 }
-
