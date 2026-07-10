@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-display: 'Manrope', 'Inter', system-ui, sans-serif;
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'Manrope', system-ui, sans-serif;
+  --font-sans: 'DM Sans', 'Inter', system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -35,14 +35,19 @@
   --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
 
-  --color-royal: var(--royal);
-  --color-indigo: var(--indigo-c);
-  --color-violet: var(--violet-c);
-  --color-amber: var(--amber-c);
-  --color-orange: var(--orange-c);
-  --color-gold: var(--gold-c);
+  /* Editorial brand tokens (kept names for backwards compatibility) */
+  --color-royal: var(--maroon);
+  --color-indigo: var(--maroon);
+  --color-violet: var(--maroon-2);
+  --color-amber: var(--brass);
+  --color-orange: var(--brass);
+  --color-gold: var(--brass-2);
   --color-emerald: var(--emerald-c);
-  --color-navy: var(--navy);
+  --color-navy: var(--ink);
+  --color-cream: var(--cream);
+  --color-maroon: var(--maroon);
+  --color-brass: var(--brass);
+  --color-ink: var(--ink);
 
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
@@ -55,74 +60,73 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 0.5rem;
 
-  --background: oklch(0.99 0.003 260);
-  --foreground: oklch(0.18 0.04 265);
+  /* Deep Maroon Luxe palette */
+  --cream:    oklch(0.977 0.008 80);   /* #FBF7F2 */
+  --cream-2:  oklch(0.955 0.012 78);
+  --maroon:   oklch(0.24 0.09 18);     /* #3B0A14 deep maroon */
+  --maroon-2: oklch(0.32 0.11 20);
+  --brass:    oklch(0.735 0.115 82);   /* #C9A24A */
+  --brass-2:  oklch(0.82 0.09 85);
+  --ink:      oklch(0.14 0.005 60);    /* #0E0E0E */
+  --emerald-c: oklch(0.55 0.12 155);
+
+  --background: var(--cream);
+  --foreground: var(--maroon);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.04 265);
+  --card-foreground: var(--maroon);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.04 265);
+  --popover-foreground: var(--maroon);
 
-  /* Electric indigo primary */
-  --primary: oklch(0.5 0.22 275);
-  --primary-foreground: oklch(0.99 0.003 260);
+  --primary: var(--maroon);
+  --primary-foreground: var(--cream);
 
-  --secondary: oklch(0.96 0.01 265);
-  --secondary-foreground: oklch(0.25 0.06 270);
+  --secondary: oklch(0.94 0.014 75);
+  --secondary-foreground: var(--maroon);
 
-  --muted: oklch(0.96 0.008 265);
-  --muted-foreground: oklch(0.48 0.03 265);
+  --muted: oklch(0.94 0.012 75);
+  --muted-foreground: oklch(0.42 0.03 30);
 
-  --accent: oklch(0.78 0.18 65);
-  --accent-foreground: oklch(0.2 0.05 60);
+  --accent: var(--brass);
+  --accent-foreground: var(--maroon);
 
-  --destructive: oklch(0.6 0.24 25);
-  --destructive-foreground: oklch(0.99 0.003 260);
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: var(--cream);
 
-  --border: oklch(0.92 0.012 265);
-  --input: oklch(0.94 0.012 265);
-  --ring: oklch(0.5 0.22 275);
+  --border: oklch(0.24 0.09 18 / 12%);
+  --input: oklch(0.24 0.09 18 / 14%);
+  --ring: var(--brass);
 
-  /* Brand swatches */
-  --royal: oklch(0.42 0.2 268);
-  --indigo-c: oklch(0.52 0.22 280);
-  --violet-c: oklch(0.55 0.25 305);
-  --orange-c: oklch(0.72 0.18 50);
-  --amber-c: oklch(0.78 0.17 70);
-  --gold-c: oklch(0.84 0.16 88);
-  --emerald-c: oklch(0.62 0.16 160);
-  --navy: oklch(0.18 0.04 265);
-
-  --sidebar: oklch(0.99 0.003 260);
-  --sidebar-foreground: oklch(0.18 0.04 265);
-  --sidebar-primary: oklch(0.5 0.22 275);
-  --sidebar-primary-foreground: oklch(0.99 0.003 260);
-  --sidebar-accent: oklch(0.96 0.01 265);
-  --sidebar-accent-foreground: oklch(0.25 0.06 270);
-  --sidebar-border: oklch(0.92 0.012 265);
-  --sidebar-ring: oklch(0.5 0.22 275);
+  --sidebar: var(--cream);
+  --sidebar-foreground: var(--maroon);
+  --sidebar-primary: var(--maroon);
+  --sidebar-primary-foreground: var(--cream);
+  --sidebar-accent: oklch(0.94 0.014 75);
+  --sidebar-accent-foreground: var(--maroon);
+  --sidebar-border: oklch(0.24 0.09 18 / 12%);
+  --sidebar-ring: var(--brass);
 }
 
 .dark {
-  --background: oklch(0.16 0.035 265);
-  --foreground: oklch(0.97 0.01 265);
-  --card: oklch(0.21 0.04 265);
-  --card-foreground: oklch(0.97 0.01 265);
-  --popover: oklch(0.21 0.04 265);
-  --popover-foreground: oklch(0.97 0.01 265);
-  --primary: oklch(0.68 0.2 280);
-  --primary-foreground: oklch(0.16 0.035 265);
-  --secondary: oklch(0.26 0.045 270);
-  --secondary-foreground: oklch(0.97 0.01 265);
-  --muted: oklch(0.26 0.045 270);
-  --muted-foreground: oklch(0.72 0.03 265);
-  --accent: oklch(0.78 0.18 65);
-  --accent-foreground: oklch(0.18 0.04 265);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 14%);
-  --ring: oklch(0.68 0.2 280);
+  --background: oklch(0.15 0.02 20);
+  --foreground: var(--cream);
+  --card: oklch(0.2 0.04 20);
+  --card-foreground: var(--cream);
+  --popover: oklch(0.2 0.04 20);
+  --popover-foreground: var(--cream);
+  --primary: var(--brass);
+  --primary-foreground: oklch(0.15 0.02 20);
+  --secondary: oklch(0.24 0.05 20);
+  --secondary-foreground: var(--cream);
+  --muted: oklch(0.24 0.05 20);
+  --muted-foreground: oklch(0.75 0.02 60);
+  --accent: var(--brass);
+  --accent-foreground: oklch(0.15 0.02 20);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: var(--brass);
 }
 
 @layer base {
@@ -137,9 +141,10 @@
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
-    font-weight: 700;
+    letter-spacing: -0.025em;
+    font-weight: 600;
   }
+  ::selection { background: var(--brass); color: var(--maroon); }
   button:not(:disabled),
   a,
   [role="button"]:not([aria-disabled="true"]),
@@ -152,67 +157,81 @@
 @layer utilities {
   .text-balance { text-wrap: balance; }
 
+  .font-display { font-family: var(--font-display); }
+
+  /* Editorial gradients — now maroon / brass */
   .gradient-brand {
-    background: linear-gradient(135deg, var(--royal) 0%, var(--indigo-c) 50%, var(--violet-c) 100%);
+    background: linear-gradient(135deg, var(--maroon) 0%, var(--maroon-2) 100%);
   }
   .gradient-warm {
-    background: linear-gradient(135deg, var(--orange-c) 0%, var(--amber-c) 50%, var(--gold-c) 100%);
+    background: linear-gradient(135deg, var(--brass) 0%, var(--brass-2) 100%);
   }
   .gradient-brand-soft {
-    background: linear-gradient(135deg,
-      color-mix(in oklab, var(--indigo-c) 14%, transparent),
-      color-mix(in oklab, var(--violet-c) 10%, transparent));
+    background: linear-gradient(180deg,
+      color-mix(in oklab, var(--brass) 8%, transparent),
+      transparent);
   }
   .text-gradient-brand {
-    background: linear-gradient(135deg, var(--royal), var(--indigo-c) 45%, var(--violet-c));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: var(--maroon);
   }
+  .dark .text-gradient-brand { color: var(--brass); }
   .text-gradient-warm {
-    background: linear-gradient(135deg, var(--orange-c), var(--amber-c) 55%, var(--gold-c));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: var(--brass);
+  }
+  .text-brass { color: var(--brass); }
+  .bg-cream { background: var(--cream); }
+  .bg-maroon { background: var(--maroon); }
+  .bg-brass { background: var(--brass); }
+  .bg-ink { background: var(--ink); }
+  .border-brass { border-color: var(--brass); }
+  .border-maroon-10 { border-color: color-mix(in oklab, var(--maroon) 12%, transparent); }
+
+  /* Editorial rules */
+  .rule-brass { height: 1px; background: color-mix(in oklab, var(--brass) 55%, transparent); }
+  .eyebrow {
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--brass);
   }
 
-  /* Theme-aware glass — readable in both light and dark mode */
+  /* Theme-aware glass */
   .glass {
-    background: color-mix(in oklab, var(--card) 72%, transparent);
+    background: color-mix(in oklab, var(--card) 78%, transparent);
     backdrop-filter: blur(18px) saturate(160%);
-    border: 1px solid color-mix(in oklab, var(--foreground) 12%, transparent);
+    border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent);
   }
   .glass-dark {
-    background: color-mix(in oklab, var(--navy) 55%, transparent);
+    background: color-mix(in oklab, var(--maroon) 55%, transparent);
     backdrop-filter: blur(18px) saturate(150%);
     border: 1px solid color-mix(in oklab, white 12%, transparent);
   }
 
   .shadow-glow {
-    box-shadow: 0 18px 60px -24px color-mix(in oklab, var(--indigo-c) 55%, transparent),
-                0 8px 24px -12px color-mix(in oklab, var(--violet-c) 35%, transparent);
+    box-shadow: 0 20px 50px -28px color-mix(in oklab, var(--maroon) 55%, transparent);
   }
   .shadow-glow-warm {
-    box-shadow: 0 18px 60px -24px color-mix(in oklab, var(--orange-c) 55%, transparent);
+    box-shadow: 0 18px 60px -24px color-mix(in oklab, var(--brass) 55%, transparent);
   }
 
   .bg-dot-grid {
     background-image: radial-gradient(circle at 1px 1px,
-      color-mix(in oklab, var(--indigo-c) 18%, transparent) 1px, transparent 0);
+      color-mix(in oklab, var(--maroon) 14%, transparent) 1px, transparent 0);
     background-size: 24px 24px;
   }
 
   .bg-mesh {
     background-image:
-      radial-gradient(at 18% 22%, color-mix(in oklab, var(--indigo-c) 28%, transparent) 0px, transparent 45%),
-      radial-gradient(at 82% 18%, color-mix(in oklab, var(--violet-c) 28%, transparent) 0px, transparent 45%),
-      radial-gradient(at 70% 85%, color-mix(in oklab, var(--orange-c) 22%, transparent) 0px, transparent 45%),
-      radial-gradient(at 12% 80%, color-mix(in oklab, var(--royal) 18%, transparent) 0px, transparent 50%);
+      radial-gradient(at 18% 22%, color-mix(in oklab, var(--brass) 22%, transparent) 0px, transparent 45%),
+      radial-gradient(at 82% 18%, color-mix(in oklab, var(--maroon) 20%, transparent) 0px, transparent 45%),
+      radial-gradient(at 70% 85%, color-mix(in oklab, var(--brass) 16%, transparent) 0px, transparent 45%);
   }
 
   .animate-gradient {
     background-size: 200% 200%;
-    animation: gradient-pan 14s ease infinite;
+    animation: gradient-pan 18s ease infinite;
   }
   @keyframes gradient-pan {
     0% { background-position: 0% 50%; }
@@ -223,8 +242,8 @@
   .animate-float { animation: float 8s ease-in-out infinite; }
   .animate-float-slow { animation: float 14s ease-in-out infinite; }
   @keyframes float {
-    0%, 100% { transform: translateY(0) translateX(0) rotate(0); }
-    50% { transform: translateY(-22px) translateX(10px) rotate(3deg); }
+    0%, 100% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-18px) translateX(6px); }
   }
 
   .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
@@ -236,17 +255,24 @@
   .hover-lift {
     transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s cubic-bezier(.2,.7,.2,1);
   }
-  .hover-lift:hover { transform: translateY(-6px); }
+  .hover-lift:hover { transform: translateY(-4px); }
 
-  /* Shimmer / shiny text — used on the footer headline */
+  /* Marquee for distributor strip */
+  .animate-marquee { animation: marquee 40s linear infinite; }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Shimmer / shiny text */
   .text-shimmer {
     background-image: linear-gradient(
       100deg,
-      var(--amber-c) 0%,
-      var(--gold-c) 20%,
+      var(--brass) 0%,
+      var(--brass-2) 20%,
       #ffffff 50%,
-      var(--gold-c) 80%,
-      var(--amber-c) 100%
+      var(--brass-2) 80%,
+      var(--brass) 100%
     );
     background-size: 200% 100%;
     -webkit-background-clip: text;
@@ -258,4 +284,8 @@
     0%   { background-position: 200% 0; }
     100% { background-position: -200% 0; }
   }
+
+  /* Reveal on scroll (used by IntersectionObserver) */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
 }
