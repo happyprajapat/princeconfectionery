@@ -12,8 +12,6 @@ export type ProductFormValues = {
   description: string;
   pack_sizes: string[];
   image_url: string | null;
-  is_seasonal: boolean;
-  season_label: string;
   is_visible: boolean;
 };
 
@@ -27,8 +25,6 @@ export function ProductForm({ initial, productId }: { initial?: Product; product
     description: initial?.description ?? "",
     pack_sizes: initial?.pack_sizes ?? [],
     image_url: initial?.image_url ?? null,
-    is_seasonal: initial?.is_seasonal ?? false,
-    season_label: initial?.season_label ?? "",
     is_visible: initial?.is_visible ?? true,
   });
   const [packInput, setPackInput] = useState("");
@@ -76,8 +72,6 @@ export function ProductForm({ initial, productId }: { initial?: Product; product
         description: values.description || null,
         pack_sizes: values.pack_sizes,
         image_url: values.image_url,
-        is_seasonal: values.is_seasonal,
-        season_label: values.is_seasonal ? (values.season_label || null) : null,
         is_visible: values.is_visible,
       };
       if (productId) {
@@ -106,7 +100,7 @@ export function ProductForm({ initial, productId }: { initial?: Product; product
       <Field label="Category">
         <select value={values.category_id ?? ""} onChange={(e) => update("category_id", e.target.value || null)} className="input">
           <option value="">No category</option>
-          {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+          {categories.map((c) => <option key={c.id} value={c.id}>{c.name}{!c.is_active ? " (hidden)" : ""}</option>)}
         </select>
       </Field>
 
@@ -158,16 +152,7 @@ export function ProductForm({ initial, productId }: { initial?: Product; product
         </div>
       </Field>
 
-      <div className="rounded-xl border border-border bg-card p-4 space-y-4">
-        <label className="flex items-center gap-3 cursor-pointer">
-          <input type="checkbox" checked={values.is_seasonal} onChange={(e) => update("is_seasonal", e.target.checked)} />
-          <span className="text-sm font-medium">Mark as seasonal product</span>
-        </label>
-        {values.is_seasonal && (
-          <Field label="Season label">
-            <input value={values.season_label} onChange={(e) => update("season_label", e.target.value)} placeholder="e.g. Diwali, Holi, Summer" className="input" />
-          </Field>
-        )}
+      <div className="rounded-xl border border-border bg-card p-4">
         <label className="flex items-center gap-3 cursor-pointer">
           <input type="checkbox" checked={values.is_visible} onChange={(e) => update("is_visible", e.target.checked)} />
           <span className="text-sm font-medium">Visible on public website</span>
