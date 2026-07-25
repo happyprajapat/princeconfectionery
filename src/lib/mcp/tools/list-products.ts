@@ -36,7 +36,7 @@ export default defineTool({
     }
     let q = supabase
       .from("products")
-      .select("id,name,slug,category_id,description,pack_sizes,is_seasonal,season_label")
+      .select("id,name,slug,category_id,description,pack_sizes")
       .eq("is_visible", true)
       .order("created_at", { ascending: false })
       .limit(limit ?? 50);
