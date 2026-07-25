@@ -369,12 +369,8 @@ function FeaturedCard({ p, i }: { p: Product; i: number }) {
           ) : (
             <div className="grid h-full w-full place-items-center font-display text-4xl text-muted-foreground/30 gradient-brand-soft">P</div>
           )}
-          {p.is_seasonal && (
-            <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full gradient-warm px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-glow-warm">
-              <Star className="h-3 w-3" /> {p.season_label || "Seasonal"}
-            </span>
-          )}
           <div className="absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-black/70 to-transparent p-4 transition group-hover:translate-y-0">
+
             <span className="inline-flex items-center gap-1 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-foreground">
               View details <ArrowRight className="h-3 w-3" />
             </span>

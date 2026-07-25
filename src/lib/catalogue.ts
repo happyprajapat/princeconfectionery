@@ -16,12 +16,11 @@ export type Product = {
   description: string | null;
   pack_sizes: string[];
   image_url: string | null;
-  is_seasonal: boolean;
-  season_label: string | null;
   is_visible: boolean;
   featured_order: number | null;
   created_at: string;
 };
+
 
 const BUCKET = "product-images";
 const PUBLIC_MARKER = `/${BUCKET}/`;

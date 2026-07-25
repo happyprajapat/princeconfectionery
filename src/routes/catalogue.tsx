@@ -9,8 +9,8 @@ import { fetchCategories, fetchVisibleProducts, type Product } from "@/lib/catal
 const searchSchema = z.object({
   category: z.string().optional(),
   q: z.string().optional(),
-  seasonal: z.boolean().optional(),
 });
+
 
 export const Route = createFileRoute("/catalogue")({
   validateSearch: searchSchema,
@@ -39,13 +39,13 @@ function CataloguePage() {
       const cat = categories.find((c) => c.slug === search.category);
       if (cat) res = res.filter((p) => p.category_id === cat.id);
     }
-    if (search.seasonal) res = res.filter((p) => p.is_seasonal);
     if (search.q) {
       const q = search.q.toLowerCase();
       res = res.filter((p) => p.name.toLowerCase().includes(q));
     }
     return res;
   }, [products, categories, search]);
+
 
   const currentCategory = categories.find((c) => c.slug === search.category);
 
@@ -58,14 +58,14 @@ function CataloguePage() {
             {currentCategory ? currentCategory.name : "Our complete range"}
           </h1>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            {filtered.length} {filtered.length === 1 ? "product" : "products"} available {search.seasonal ? "this season" : ""}.
+            {filtered.length} {filtered.length === 1 ? "product" : "products"} available.
           </p>
 
           <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                navigate({ search: (p: { category?: string; q?: string; seasonal?: boolean }) => ({ ...p, q: query || undefined }) });
+                navigate({ search: (p: { category?: string; q?: string }) => ({ ...p, q: query || undefined }) });
               }}
               className="relative flex-1 max-w-md"
             >
@@ -79,22 +79,15 @@ function CataloguePage() {
               {query && (
                 <button
                   type="button"
-                  onClick={() => { setQuery(""); navigate({ search: (p: { category?: string; q?: string; seasonal?: boolean }) => ({ ...p, q: undefined }) }); }}
+                  onClick={() => { setQuery(""); navigate({ search: (p: { category?: string; q?: string }) => ({ ...p, q: undefined }) }); }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                 >
                   <X className="h-4 w-4" />
                 </button>
               )}
             </form>
-            <button
-              onClick={() => navigate({ search: (p: { category?: string; q?: string; seasonal?: boolean }) => ({ ...p, seasonal: p.seasonal ? undefined : true }) })}
-              className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
-                search.seasonal ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background text-foreground hover:border-primary/40"
-              }`}
-            >
-              Seasonal only
-            </button>
           </div>
+
         </div>
       </section>
 
@@ -105,7 +98,7 @@ function CataloguePage() {
           <nav className="mt-3 flex flex-wrap gap-2 lg:flex-col">
             <Link
               to="/catalogue"
-              search={(p: { category?: string; q?: string; seasonal?: boolean }) => ({ ...p, category: undefined })}
+              search={(p: { category?: string; q?: string }) => ({ ...p, category: undefined })}
               className={`rounded-md px-3 py-2 text-sm transition ${!search.category ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-muted"}`}
             >
               All products
@@ -114,12 +107,13 @@ function CataloguePage() {
               <Link
                 key={c.id}
                 to="/catalogue"
-                search={(p: { category?: string; q?: string; seasonal?: boolean }) => ({ ...p, category: c.slug })}
+                search={(p: { category?: string; q?: string }) => ({ ...p, category: c.slug })}
                 className={`rounded-md px-3 py-2 text-sm transition ${search.category === c.slug ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-muted"}`}
               >
                 {c.name}
               </Link>
             ))}
+
           </nav>
         </aside>
 
@@ -160,12 +154,8 @@ function ProductCard({ p }: { p: Product }) {
         ) : (
           <div className="grid h-full w-full place-items-center font-display text-3xl text-muted-foreground/40">P</div>
         )}
-        {p.is_seasonal && (
-          <span className="absolute left-3 top-3 rounded-full bg-primary px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">
-            {p.season_label || "Seasonal"}
-          </span>
-        )}
       </div>
+
       <div className="p-4">
         <h3 className="font-display text-base font-semibold text-foreground line-clamp-1">{p.name}</h3>
         {p.pack_sizes.length > 0 && (
