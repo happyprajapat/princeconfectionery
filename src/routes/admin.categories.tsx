@@ -66,7 +66,8 @@ function AdminCategories() {
   return (
     <div>
       <h1 className="font-display text-3xl font-semibold">Categories</h1>
-      <p className="text-sm text-muted-foreground">Organise how products are grouped on the public site.</p>
+      <p className="text-sm text-muted-foreground">Organise how products are grouped. <span className="font-medium text-foreground">Hiding a category also hides all its products from the public site</span> — you can re-enable it any time.</p>
+
 
       <div className="mt-6 flex gap-2 max-w-md">
         <input
@@ -96,9 +97,10 @@ function AdminCategories() {
               )}
               {!c.is_active && <span className="ml-2 rounded-full bg-muted px-2 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">Inactive</span>}
             </div>
-            <button onClick={() => toggleActive(c.id, c.is_active)} className="text-xs text-muted-foreground hover:text-primary">
-              {c.is_active ? "Disable" : "Enable"}
+            <button onClick={() => toggleActive(c.id, c.is_active)} className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${c.is_active ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" : "bg-muted text-muted-foreground"}`}>
+              {c.is_active ? "Visible" : "Hidden"}
             </button>
+
             {editing === c.id ? (
               <>
                 <button onClick={() => rename(c.id)} className="text-primary"><Check className="h-4 w-4" /></button>
