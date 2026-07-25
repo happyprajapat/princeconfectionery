@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, MessageCircle, Phone, Sparkles } from "lucide-react";
+import { ArrowLeft, MessageCircle, Phone } from "lucide-react";
 import { SiteShell } from "@/components/site-shell";
 import { SITE } from "@/lib/site";
 import { fetchAllCategories, fetchProductBySlug } from "@/lib/catalogue";
@@ -50,12 +50,8 @@ function ProductPage() {
             ) : (
               <div className="grid h-full w-full place-items-center font-display text-6xl text-muted-foreground/30">P</div>
             )}
-            {product.is_seasonal && (
-              <span className="absolute left-4 top-4 inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary-foreground">
-                <Sparkles className="h-3 w-3" /> {product.season_label || "Seasonal"}
-              </span>
-            )}
           </div>
+
 
           <div className="flex flex-col">
             {category && (

@@ -49,11 +49,9 @@ export type Database = {
           featured_order: number | null
           id: string
           image_url: string | null
-          is_seasonal: boolean
           is_visible: boolean
           name: string
           pack_sizes: string[]
-          season_label: string | null
           slug: string
           updated_at: string
         }
@@ -64,11 +62,9 @@ export type Database = {
           featured_order?: number | null
           id?: string
           image_url?: string | null
-          is_seasonal?: boolean
           is_visible?: boolean
           name: string
           pack_sizes?: string[]
-          season_label?: string | null
           slug: string
           updated_at?: string
         }
@@ -79,11 +75,9 @@ export type Database = {
           featured_order?: number | null
           id?: string
           image_url?: string | null
-          is_seasonal?: boolean
           is_visible?: boolean
           name?: string
           pack_sizes?: string[]
-          season_label?: string | null
           slug?: string
           updated_at?: string
         }

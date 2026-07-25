@@ -19,7 +19,7 @@ export default defineTool({
     const { data, error } = await supabase
       .from("products")
       .select(
-        "id,name,slug,category_id,description,pack_sizes,is_seasonal,season_label,is_visible",
+        "id,name,slug,category_id,description,pack_sizes,is_visible",
       )
       .eq("slug", slug)
       .maybeSingle();

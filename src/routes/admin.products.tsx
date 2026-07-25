@@ -16,7 +16,7 @@ function AdminProducts() {
   const { data: categories = [] } = useQuery({ queryKey: ["all-categories"], queryFn: fetchAllCategories });
   const [q, setQ] = useState("");
   const [filterCat, setFilterCat] = useState<string>("");
-  const [filterVis, setFilterVis] = useState<"all" | "visible" | "hidden" | "seasonal">("all");
+  const [filterVis, setFilterVis] = useState<"all" | "visible" | "hidden">("all");
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   const filtered = useMemo(() => {
@@ -25,10 +25,10 @@ function AdminProducts() {
       if (filterCat && p.category_id !== filterCat) return false;
       if (filterVis === "visible" && !p.is_visible) return false;
       if (filterVis === "hidden" && p.is_visible) return false;
-      if (filterVis === "seasonal" && !p.is_seasonal) return false;
       return true;
     });
   }, [products, q, filterCat, filterVis]);
+
 
   const toggleVis = useMutation({
     mutationFn: async ({ id, value }: { id: string; value: boolean }) => {
@@ -98,8 +98,8 @@ function AdminProducts() {
           <option value="all">All</option>
           <option value="visible">Visible</option>
           <option value="hidden">Hidden</option>
-          <option value="seasonal">Seasonal</option>
         </select>
+
       </div>
 
       {selected.size > 0 && (
@@ -139,8 +139,8 @@ function AdminProducts() {
                       </div>
                       <div>
                         <p className="font-medium text-foreground">{p.name}</p>
-                        {p.is_seasonal && <span className="text-[10px] uppercase tracking-wider text-primary">{p.season_label || "Seasonal"}</span>}
                       </div>
+
                     </div>
                   </td>
                   <td className="px-3 py-3 hidden md:table-cell text-muted-foreground">{cat?.name || "—"}</td>
