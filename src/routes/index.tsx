@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { SiteShell } from "@/components/site-shell";
+import { Hero } from "@/components/hero";
 import { SITE } from "@/lib/site";
 import { fetchCategories, fetchVisibleProducts, fetchFeaturedProducts, type Product, type Category } from "@/lib/catalogue";
 
@@ -110,97 +111,6 @@ function Brands() {
         </div>
       </div>
     </section>
-  );
-}
-
-/* ---------- HERO ---------- */
-function Hero() {
-  return (
-    <section className="relative overflow-hidden">
-      {/* animated gradient mesh background */}
-      <div className="absolute inset-0 bg-mesh animate-gradient" aria-hidden />
-      <div className="absolute inset-0 bg-dot-grid opacity-40" aria-hidden />
-
-      {/* floating decorative shapes */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-        <div className="absolute -top-20 -left-20 h-72 w-72 rounded-full gradient-brand opacity-20 blur-3xl animate-float-slow" />
-        <div className="absolute top-40 -right-24 h-80 w-80 rounded-full gradient-warm opacity-25 blur-3xl animate-float" />
-        <div className="absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-violet-c/20 blur-3xl animate-float-slow" />
-        <FloatingIcon className="left-[8%] top-[22%]" delay={0}><Cookie className="h-6 w-6" /></FloatingIcon>
-        <FloatingIcon className="right-[10%] top-[18%]" delay={1.2}><Candy className="h-6 w-6" /></FloatingIcon>
-        <FloatingIcon className="left-[14%] bottom-[18%]" delay={2}><Cake className="h-6 w-6" /></FloatingIcon>
-        <FloatingIcon className="right-[16%] bottom-[24%]" delay={0.6}><Nut className="h-6 w-6" /></FloatingIcon>
-      </div>
-
-      <div className="relative mx-auto max-w-7xl px-4 pt-20 pb-28 sm:px-6 lg:px-8 lg:pt-28 lg:pb-36 text-center">
-        <motion.div initial="hidden" animate="show" variants={fadeUp}>
-          <span className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-foreground/80 shadow-sm">
-            <Sparkles className="h-3.5 w-3.5 text-violet-c" />
-            Tricity's Premium Confectionery House
-          </span>
-        </motion.div>
-
-        <motion.h1
-          initial="hidden" animate="show" custom={1} variants={fadeUp}
-          className="mt-6 font-display text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl text-balance"
-        >
-          <span className="text-gradient-brand">Prince Confectionery</span>
-          <br />
-          <span className="text-foreground">Departmental</span>
-        </motion.h1>
-
-        <motion.p
-          initial="hidden" animate="show" custom={2} variants={fadeUp}
-          className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl text-balance"
-        >
-          Premium <span className="text-gradient-warm font-semibold">Namkeen, Bakery, Sweets & Snacks</span> for
-          retail and wholesale customers — curated from 200+ trusted products.
-        </motion.p>
-
-        <motion.div
-          initial="hidden" animate="show" custom={3} variants={fadeUp}
-          className="mt-9 flex flex-wrap justify-center gap-3"
-        >
-          <Link
-            to="/catalogue"
-            className="group inline-flex items-center gap-2 rounded-full gradient-brand px-7 py-3.5 text-sm font-semibold text-white shadow-glow transition hover:scale-105"
-          >
-            Browse Products
-            <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-          </Link>
-          <a
-            href={WA}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-full glass px-7 py-3.5 text-sm font-semibold text-foreground transition hover:scale-105"
-          >
-            <MessageCircle className="h-4 w-4 text-emerald" /> Contact on WhatsApp
-          </a>
-        </motion.div>
-
-        <motion.div
-          initial="hidden" animate="show" custom={4} variants={fadeUp}
-          className="mt-12 flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs font-medium text-muted-foreground"
-        >
-          {["Wholesale rates", "Retail welcome", "Fresh stock daily", "Tricity delivery"].map((t) => (
-            <span key={t} className="inline-flex items-center gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald" /> {t}
-            </span>
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-function FloatingIcon({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
-  return (
-    <div
-      className={`absolute hidden md:grid h-12 w-12 place-items-center rounded-2xl glass text-violet-c shadow-glow animate-float ${className}`}
-      style={{ animationDelay: `${delay}s` }}
-    >
-      {children}
-    </div>
   );
 }
 
