@@ -83,7 +83,7 @@ export function Hero() {
             Wholesale distribution since {SITE.established}
           </motion.span>
 
-          <h1 className="mt-7 font-display text-[2.6rem] font-extrabold leading-[1.06] tracking-[-0.03em] text-foreground sm:text-6xl lg:text-[4.15rem]">
+          <h1 className="mt-7 font-hero text-[2.6rem] font-extrabold leading-[1.06] tracking-[-0.03em] text-foreground sm:text-6xl lg:text-[4.15rem]">
             {["Supplying Tricity's", "retailers with", "trusted quality."].map((line, i) => (
               <span key={line} className="block overflow-hidden">
                 <motion.span
@@ -134,7 +134,7 @@ export function Hero() {
                 className="rounded-2xl border border-foreground/10 bg-card/60 p-4 backdrop-blur-md transition-colors duration-300 hover:border-primary/30 sm:p-5"
               >
                 <s.icon className="h-4 w-4 text-gold" />
-                <div className="mt-3 font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+                <div className="mt-3 font-hero text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
                   {s.value}
                 </div>
                 <div className="mt-1 text-[11px] font-medium leading-snug text-muted-foreground sm:text-xs">
@@ -157,7 +157,7 @@ export function Hero() {
             <ShowcaseCard key={c.title} index={i} reduce={!!reduce} className={c.className} tall={c.tall}>
               <c.icon className="h-5 w-5 text-gold" />
               <div className="mt-auto">
-                <div className="font-display text-lg font-bold tracking-tight text-foreground">{c.title}</div>
+                <div className="font-hero text-lg font-bold tracking-tight text-foreground">{c.title}</div>
                 <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{c.subtitle}</p>
               </div>
             </ShowcaseCard>
