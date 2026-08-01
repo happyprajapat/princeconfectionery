@@ -30,7 +30,7 @@ export function HeroShowcase() {
       {/* soft stage light */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40 hero-stage" />
 
-      <div className="flex items-end justify-center gap-[-1rem] px-2 sm:gap-0">
+      <div className="flex items-end justify-center px-2">
         {PACKS.map((p, i) => (
           <motion.div
             key={p.label}
@@ -48,7 +48,7 @@ export function HeroShowcase() {
                 ease: "easeInOut",
                 delay: i * 0.7,
               }}
-              className="-mx-2 sm:-mx-3"
+              className="-mx-1.5 sm:-mx-2"
             >
               <PackShape pack={p} />
             </motion.div>
@@ -99,7 +99,7 @@ function PackShape({ pack }: { pack: Pack }) {
         <div className="absolute inset-x-0 top-[38%] h-px bg-foreground/10" />
         <div className="absolute inset-x-0 bottom-0 p-3">
           <div
-            className={`font-hero text-[10px] font-extrabold uppercase tracking-[0.18em] ${
+            className={`text-center font-hero text-[9px] font-extrabold uppercase tracking-[0.16em] sm:text-[10px] ${
               pack.tone === "royal" ? "text-white/85" : "text-foreground/60"
             }`}
           >
