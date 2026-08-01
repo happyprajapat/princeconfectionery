@@ -80,8 +80,8 @@ function PackShape({ pack }: { pack: Pack }) {
     <div
       className="group relative transition-transform duration-500 ease-out hover:-translate-y-2"
       style={{
-        height: `clamp(${height * 0.56}px, ${height / 8}vw, ${height}px)`,
-        width: `clamp(${width * 0.56}px, ${width / 8}vw, ${width}px)`,
+        height: `clamp(${height * 0.62}px, ${height / 4.6}vw, ${height}px)`,
+        width: `clamp(${width * 0.62}px, ${width / 4.6}vw, ${width}px)`,
       }}
     >
       <div
