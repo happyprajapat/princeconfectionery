@@ -4,7 +4,7 @@ import { ArrowRight, ChevronDown } from "lucide-react";
 import { SITE } from "@/lib/site";
 import { HeroShowcase } from "@/components/hero-showcase";
 
-const HEADLINE = ["India's Trusted", "Wholesale Partner", "for Snacks & Bakery"];
+const HEADLINE = ["Tricity's Trusted", "Wholesale Partner", "for Snacks & Bakery"];
 
 export function Hero() {
   const reduce = useReducedMotion();
