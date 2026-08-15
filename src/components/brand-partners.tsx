@@ -54,16 +54,16 @@ function BrandRow({
           }}
         />
 
-        <div className="relative grid grid-cols-1 items-center gap-6 py-10 sm:gap-10 sm:py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] md:py-14 lg:py-16">
+        <div className="relative grid grid-cols-1 items-center gap-9 py-10 sm:gap-10 sm:py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] md:py-14 lg:py-16">
           {/* logo stage — normalised optical area, no card */}
           <div className="relative mx-auto grid h-28 w-full max-w-[19rem] place-items-center sm:h-32 md:mx-0 md:h-36 lg:h-40">
             {/* soft luminous plate keeps dark logo artwork legible on navy, without a card */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-x-6 -inset-y-4 opacity-90 blur-xl transition-opacity duration-500 group-hover:opacity-100"
+              className="pointer-events-none absolute -inset-x-4 -inset-y-2 opacity-100 blur-lg transition-opacity duration-500 group-hover:opacity-100"
               style={{
                 background:
-                  "radial-gradient(closest-side, rgba(255,255,255,0.94), rgba(255,255,255,0.62) 55%, transparent 78%)",
+                  "radial-gradient(closest-side, rgba(255,255,255,0.99) 0%, rgba(255,255,255,0.97) 45%, rgba(255,255,255,0.55) 70%, transparent 85%)",
               }}
             />
             <div
