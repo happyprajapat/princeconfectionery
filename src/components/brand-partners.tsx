@@ -62,7 +62,7 @@ export function BrandPartners() {
                 style={{ ["--brand-accent" as string]: `hsl(${ACCENTS[i % ACCENTS.length]})` }}
                 className="group flex h-full flex-col rounded-[28px] border border-border/70 bg-card p-5 shadow-[0_1px_2px_rgba(0,0,0,0.04)] outline-none transition-[transform,box-shadow,border-color] duration-300 ease-out focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:p-6 lg:p-7 md:hover:-translate-y-1.5 md:hover:border-[color-mix(in_oklab,var(--brand-accent)_45%,transparent)] md:hover:shadow-[0_18px_50px_-24px_var(--brand-accent)]"
               >
-                <div className="grid aspect-[4/3] w-full place-items-center overflow-hidden rounded-[20px] bg-white p-5 sm:p-6">
+                <div className="grid aspect-[16/9] w-full place-items-center overflow-hidden rounded-[20px] bg-white p-6 sm:p-7">
                   <img
                     src={b.logo}
                     alt={`${b.name} logo`}
@@ -75,8 +75,9 @@ export function BrandPartners() {
                   {b.name}
                 </h3>
                 <p className="mt-2 text-[0.8rem] leading-relaxed text-muted-foreground">{b.tagline}</p>
+                <div className="grow" />
 
-                <span className="mt-6 inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-foreground/70 transition-colors duration-300 ease-out md:opacity-70 md:group-hover:opacity-100 md:group-hover:text-foreground">
+                <span className="mt-6 inline-flex self-start items-center gap-1.5 text-[0.8rem] font-semibold text-foreground/70 transition-colors duration-300 ease-out md:opacity-70 md:group-hover:opacity-100 md:group-hover:text-foreground">
                   Explore Brand
                   <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 ease-out md:group-hover:translate-x-1" />
                 </span>
