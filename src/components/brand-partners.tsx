@@ -6,113 +6,135 @@ import { SITE } from "@/lib/site";
 
 /** Per-brand ambient tint + optical size normalisation for each source asset. */
 const BRAND_STYLE = [
-  { glow: "28 90% 58%", scale: 1, index: "01" }, // Ginni — warm gold
-  { glow: "355 78% 55%", scale: 1.08, index: "02" }, // Shree Bajrang — red/gold
-  { glow: "148 55% 46%", scale: 0.94, index: "03" }, // Mom's Basket — green/warm
+  { glow: "30 92% 60%", scale: 1.0 }, // Ginni — warm red/gold
+  { glow: "355 80% 58%", scale: 1.1 }, // Shree Bajrang — red/gold
+  { glow: "148 58% 48%", scale: 1.12 }, // Mom's Basket — green/warm
 ];
 
-function BrandRow({
+function BrandColumn({
   brand,
   i,
   reduce,
+  active,
+  setActive,
 }: {
   brand: (typeof SITE.brands)[number];
   i: number;
   reduce: boolean | null;
+  active: number | null;
+  setActive: (i: number | null) => void;
 }) {
   const s = BRAND_STYLE[i % BRAND_STYLE.length];
   const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null);
+  const dimmed = active !== null && active !== i;
 
-  const onMove = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+  const onMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const r = e.currentTarget.getBoundingClientRect();
     setPointer({ x: e.clientX - r.left, y: e.clientY - r.top });
   }, []);
 
   return (
     <motion.li
-      initial={reduce ? false : { opacity: 0, y: 28 }}
+      initial={reduce ? false : { opacity: 0, y: 22 }}
       whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-70px" }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: reduce ? 0 : i * 0.14 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: reduce ? 0 : i * 0.12 }}
+      className="relative"
+      style={{ ["--glow" as string]: `hsl(${s.glow})` }}
     >
-      <Link
-        to="/catalogue"
-        aria-label={`Explore ${brand.name} products`}
+      <div
         onMouseMove={reduce ? undefined : onMove}
-        onMouseLeave={() => setPointer(null)}
-        style={{ ["--glow" as string]: `hsl(${s.glow})` }}
-        className="group relative block overflow-hidden rounded-none outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_oklab,var(--glow)_70%,transparent)] focus-visible:ring-offset-0"
+        onMouseEnter={() => setActive(i)}
+        onMouseLeave={() => {
+          setActive(null);
+          setPointer(null);
+        }}
+        className={`group relative flex flex-col items-center px-2 py-6 text-center transition-opacity duration-500 sm:px-4 sm:py-8 ${
+          dimmed ? "opacity-70" : "opacity-100"
+        }`}
       >
-        {/* cursor-following ambient light */}
+        {/* cursor light — lighting, not a UI shape */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100"
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
           style={{
             background: pointer
-              ? `radial-gradient(220px circle at ${pointer.x}px ${pointer.y}px, color-mix(in oklab, var(--glow) 16%, transparent), transparent 70%)`
-              : "radial-gradient(60% 120% at 50% 50%, color-mix(in oklab, var(--glow) 8%, transparent), transparent 70%)",
+              ? `radial-gradient(240px circle at ${pointer.x}px ${pointer.y}px, color-mix(in oklab, var(--glow) 12%, transparent), transparent 70%)`
+              : "transparent",
           }}
         />
 
-        <div className="relative grid grid-cols-1 items-center gap-9 py-10 sm:gap-10 sm:py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] md:py-14 lg:py-16">
-          {/* logo stage — normalised optical area, soft floating light plate (no card) */}
-          <div className="relative mx-auto grid h-28 w-full max-w-[19rem] place-items-center rounded-[999px] bg-white/95 px-8 py-4 shadow-[0_28px_70px_-30px_rgba(0,0,0,0.85)] transition-shadow duration-500 sm:h-32 md:mx-0 md:h-36 lg:h-40">
-
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -inset-x-8 -inset-y-6 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100"
-              style={{
-                background:
-                  "radial-gradient(closest-side, color-mix(in oklab, var(--glow) 30%, transparent), transparent)",
-              }}
-            />
-
-            <img
-              src={brand.logo}
-              alt={`${brand.name} logo`}
-              loading="lazy"
-              style={{ ["--s" as string]: String(s.scale) }}
-              className="relative h-full w-full object-contain transition-transform duration-500 ease-out [transform:scale(var(--s))] group-hover:[transform:scale(calc(var(--s)*1.05))] motion-reduce:transition-none motion-reduce:group-hover:[transform:scale(var(--s))]"
-            />
-          </div>
-
-          {/* editorial text column */}
-          <div className="min-w-0 text-center md:text-left">
-            <span className="text-[11px] font-semibold tabular-nums tracking-[0.3em] text-white/35">
-              {s.index}
-            </span>
-            <h3 className="mt-3 font-hero text-[clamp(1.35rem,5vw,2rem)] font-extrabold leading-tight tracking-tight text-white/85 transition-colors duration-300 group-hover:text-white text-balance">
-              {brand.name}
-            </h3>
-            <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-white/55 md:mx-0">
-              {brand.tagline}
-            </p>
-            <span className="mt-5 inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-white/50 transition-all duration-300 group-hover:gap-2.5 group-hover:text-white">
-              Explore Brand
-              <ArrowRight className="h-3.5 w-3.5" />
-            </span>
-          </div>
+        {/* normalised logo stage — same box for all three, optical scale per asset */}
+        <div className="relative grid h-36 w-full place-items-center sm:h-44 lg:h-52">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-1/2 h-[130%] -translate-y-1/2 blur-2xl transition-opacity duration-700"
+            style={{
+              background:
+                "radial-gradient(closest-side, rgba(255,255,255,0.30), rgba(255,255,255,0.10) 60%, transparent 80%)",
+              opacity: dimmed ? 0.55 : 1,
+            }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-4 top-1/2 h-[120%] -translate-y-1/2 opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-100"
+            style={{
+              background:
+                "radial-gradient(closest-side, color-mix(in oklab, var(--glow) 34%, transparent), transparent 78%)",
+            }}
+          />
+          <img
+            src={brand.logo}
+            alt={`${brand.name} logo`}
+            loading="lazy"
+            style={{ ["--s" as string]: String(s.scale) }}
+            className="relative h-full w-full object-contain [transform:scale(var(--s))] transition-transform duration-700 ease-out group-hover:[transform:scale(calc(var(--s)*1.05))] motion-reduce:transition-none motion-reduce:group-hover:[transform:scale(var(--s))]"
+          />
         </div>
-      </Link>
+
+        <h3
+          className={`mt-6 flex min-h-0 sm:min-h-[3.4rem] items-start justify-center font-hero text-[clamp(1.05rem,2vw,1.3rem)] font-extrabold uppercase leading-tight tracking-[0.08em] transition-colors duration-500 text-balance ${
+            dimmed ? "text-white/60" : "text-white/90"
+          } group-hover:text-white`}
+        >
+          {brand.name}
+        </h3>
+        <p className="mx-auto mt-2.5 max-w-[17rem] sm:mt-3 text-[0.83rem] leading-relaxed text-white/50 text-pretty">
+          {brand.tagline}
+        </p>
+      </div>
     </motion.li>
   );
 }
 
 export function BrandPartners() {
   const reduce = useReducedMotion();
+  const [active, setActive] = useState<number | null>(null);
 
   return (
     <section
       aria-labelledby="brand-partners-heading"
-      className="relative isolate overflow-hidden bg-[oklch(0.17_0.045_268)] py-16 sm:py-20 lg:py-24"
+      className="relative isolate overflow-hidden bg-[oklch(0.17_0.045_268)] py-20 sm:py-24 lg:py-28"
     >
+      {/* three barely-visible light zones, one per brand */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(70% 50% at 20% 0%, color-mix(in oklab, var(--violet-c) 22%, transparent), transparent 70%), radial-gradient(60% 50% at 90% 100%, color-mix(in oklab, var(--indigo-c) 18%, transparent), transparent 70%)",
+            "radial-gradient(45% 40% at 17% 58%, rgba(255,190,120,0.07), transparent 70%), radial-gradient(45% 40% at 50% 58%, rgba(255,140,140,0.06), transparent 70%), radial-gradient(45% 40% at 83% 58%, rgba(140,235,180,0.06), transparent 70%)",
         }}
+      />
+      {/* soft top/bottom falloff so the section blends into neighbours */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-28"
+        style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.22), transparent)" }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-28"
+        style={{ background: "linear-gradient(to top, rgba(0,0,0,0.22), transparent)" }}
       />
 
       <div className="relative mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8">
@@ -121,29 +143,52 @@ export function BrandPartners() {
           whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.55, ease: "easeOut" }}
-          className="max-w-2xl"
+          className="mx-auto max-w-2xl text-center"
         >
-          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-white/45">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-white/45">
             Authorized Distributor
           </p>
           <h2
             id="brand-partners-heading"
-            className="mt-5 font-hero text-[clamp(1.9rem,7vw,3.25rem)] font-extrabold leading-[1.08] tracking-tight text-white text-balance"
+            className="mt-5 font-hero text-[clamp(1.75rem,5.5vw,2.9rem)] font-extrabold leading-[1.1] tracking-tight text-white text-balance"
           >
             Trusted Brands.
             <br />
             Official Partnerships.
           </h2>
-          <p className="mt-5 max-w-md text-sm leading-relaxed text-white/55 sm:text-[0.95rem]">
+          <p className="mx-auto mt-5 max-w-md text-sm leading-relaxed text-white/55">
             Authorized distributor of leading food brands across Chandigarh, Mohali &amp; Panchkula.
           </p>
         </motion.header>
 
-        <ul className="mt-10 divide-y divide-white/10 border-y border-white/10 sm:mt-14">
+        <ul className="mx-auto mt-12 grid max-w-sm grid-cols-1 gap-2 sm:mt-16 sm:max-w-none sm:grid-cols-3 sm:gap-4 lg:gap-8">
           {SITE.brands.map((b, i) => (
-            <BrandRow key={b.name} brand={b} i={i} reduce={reduce} />
+            <BrandColumn
+              key={b.name}
+              brand={b}
+              i={i}
+              reduce={reduce}
+              active={active}
+              setActive={setActive}
+            />
           ))}
         </ul>
+
+        <motion.div
+          initial={reduce ? false : { opacity: 0 }}
+          whileInView={reduce ? undefined : { opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.35 }}
+          className="mt-12 text-center sm:mt-16"
+        >
+          <Link
+            to="/catalogue"
+            className="group inline-flex items-center gap-2 text-sm font-semibold text-white/65 transition-colors duration-300 hover:text-white"
+          >
+            View Brand Collections
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
