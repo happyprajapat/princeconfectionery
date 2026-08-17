@@ -6,9 +6,9 @@ import { SITE } from "@/lib/site";
 
 /** Per-brand ambient tint + optical size normalisation for each source asset. */
 const BRAND_STYLE = [
-  { glow: "30 92% 60%", scale: 1.0 }, // Ginni — warm red/gold
-  { glow: "355 80% 58%", scale: 1.1 }, // Shree Bajrang — red/gold
-  { glow: "148 58% 48%", scale: 0.92 }, // Mom's Basket — green/warm
+  { glow: "30 92% 60%", scale: 1.06 }, // Ginni — warm red/gold
+  { glow: "355 80% 58%", scale: 1.16 }, // Shree Bajrang — red/gold
+  { glow: "148 58% 48%", scale: 1.0 }, // Mom's Basket — green/warm
 ];
 
 function BrandColumn({
@@ -65,7 +65,7 @@ function BrandColumn({
         />
 
         {/* normalised logo stage — same box for all three, optical scale per asset */}
-        <div className="relative grid h-32 w-full place-items-center sm:h-36 lg:h-44">
+        <div className="relative grid h-36 w-full place-items-center sm:h-44 lg:h-52">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-x-0 top-1/2 h-[130%] -translate-y-1/2 blur-2xl transition-opacity duration-700"
@@ -88,12 +88,12 @@ function BrandColumn({
             alt={`${brand.name} logo`}
             loading="lazy"
             style={{ ["--s" as string]: String(s.scale) }}
-            className="relative h-full w-full max-w-[15rem] object-contain [transform:scale(var(--s))] transition-transform duration-700 ease-out group-hover:[transform:scale(calc(var(--s)*1.05))] motion-reduce:transition-none motion-reduce:group-hover:[transform:scale(var(--s))]"
+            className="relative h-full w-full max-w-[18rem] object-contain [transform:scale(var(--s))] transition-transform duration-700 ease-out group-hover:[transform:scale(calc(var(--s)*1.05))] motion-reduce:transition-none motion-reduce:group-hover:[transform:scale(var(--s))]"
           />
         </div>
 
         <h3
-          className={`mt-7 font-hero text-[clamp(1.05rem,2vw,1.3rem)] font-extrabold uppercase leading-tight tracking-[0.08em] transition-colors duration-500 text-balance ${
+          className={`mt-7 flex min-h-[3.4rem] items-start justify-center font-hero text-[clamp(1.05rem,2vw,1.3rem)] font-extrabold uppercase leading-tight tracking-[0.08em] transition-colors duration-500 text-balance ${
             dimmed ? "text-white/60" : "text-white/90"
           } group-hover:text-white`}
         >
