@@ -6,8 +6,8 @@ import { SITE } from "@/lib/site";
 
 /** Per-brand ambient tint + optical size normalisation for each source asset. */
 const BRAND_STYLE = [
-  { glow: "30 92% 60%", scale: 1.06 }, // Ginni — warm red/gold
-  { glow: "355 80% 58%", scale: 1.16 }, // Shree Bajrang — red/gold
+  { glow: "30 92% 60%", scale: 1.0 }, // Ginni — warm red/gold
+  { glow: "355 80% 58%", scale: 1.1 }, // Shree Bajrang — red/gold
   { glow: "148 58% 48%", scale: 1.0 }, // Mom's Basket — green/warm
 ];
 
@@ -88,7 +88,7 @@ function BrandColumn({
             alt={`${brand.name} logo`}
             loading="lazy"
             style={{ ["--s" as string]: String(s.scale) }}
-            className="relative h-full w-full max-w-[18rem] object-contain [transform:scale(var(--s))] transition-transform duration-700 ease-out group-hover:[transform:scale(calc(var(--s)*1.05))] motion-reduce:transition-none motion-reduce:group-hover:[transform:scale(var(--s))]"
+            className="relative h-full w-full object-contain [transform:scale(var(--s))] transition-transform duration-700 ease-out group-hover:[transform:scale(calc(var(--s)*1.05))] motion-reduce:transition-none motion-reduce:group-hover:[transform:scale(var(--s))]"
           />
         </div>
 
