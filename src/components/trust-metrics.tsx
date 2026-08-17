@@ -116,24 +116,16 @@ export function TrustMetrics() {
               initial={{ opacity: 0, y: 18 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.55, delay: reduced ? 0 : 0.15 + i * 0.12, ease: [0.16, 1, 0.3, 1] }}
-              className={`group relative flex flex-col items-center px-2 text-center sm:px-4 ${
-                i % 2 === 1 ? "before:absolute before:inset-y-3 before:left-0 before:w-px before:content-['']" : ""
-              } lg:before:absolute lg:before:inset-y-2 lg:before:left-0 lg:before:w-px lg:before:content-[''] ${
-                i === 0 ? "lg:before:hidden" : ""
-              }`}
-              style={{
-                // @ts-expect-error css custom prop
-                "--sep": "linear-gradient(180deg, transparent, oklch(0.8 0.05 285 / 0.16), transparent)",
-              }}
+              className="group relative flex flex-col items-center px-2 text-center sm:px-4"
             >
               <span
                 aria-hidden
-                className="pointer-events-none absolute inset-y-0 left-0 w-px hidden sm:block lg:block"
+                className={`pointer-events-none absolute inset-y-0 left-0 w-px ${
+                  i % 2 === 0 ? "hidden" : ""
+                } ${i === 0 ? "lg:hidden" : "lg:block"}`}
                 style={{
                   background:
-                    i === 0
-                      ? "transparent"
-                      : "linear-gradient(180deg, transparent, oklch(0.85 0.05 285 / 0.18), transparent)",
+                    "linear-gradient(180deg, transparent, oklch(0.85 0.05 285 / 0.18), transparent)",
                 }}
               />
               {/* hover radial light */}
@@ -148,7 +140,7 @@ export function TrustMetrics() {
               </span>
 
               <span
-                className="relative mt-3 font-display text-5xl font-extrabold leading-none tracking-tight transition-transform duration-500 sm:text-6xl lg:text-7xl group-hover:scale-[1.04]"
+                className="relative mt-3 font-hero text-5xl font-extrabold leading-none tracking-tight transition-transform duration-500 sm:text-6xl lg:text-7xl group-hover:scale-[1.04]"
                 style={{
                   backgroundImage: "linear-gradient(160deg, #A78BFA 0%, #8B5CF6 45%, #4F46E5 100%)",
                   WebkitBackgroundClip: "text",
