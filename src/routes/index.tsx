@@ -1,14 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { motion, useInView, useMotionValue, useTransform, animate, useScroll, useSpring } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import {
   ArrowRight, Sparkles, Phone, MessageCircle, ShieldCheck, Truck, Award, Boxes, Leaf, PackageCheck,
   Cookie, Cake, Candy, Wheat, Croissant, Nut, ShoppingBasket, Flame, Star, CheckCircle2,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { SiteShell } from "@/components/site-shell";
 import { Hero } from "@/components/hero";
 import { BrandPartners } from "@/components/brand-partners";
+import { TrustMetrics } from "@/components/trust-metrics";
 import { SITE } from "@/lib/site";
 import { fetchCategories, fetchVisibleProducts, fetchFeaturedProducts, type Product, type Category } from "@/lib/catalogue";
 
@@ -47,7 +48,7 @@ function Home() {
       <ScrollProgress />
       <Hero />
       <BrandPartners />
-      <Stats productCount={products.length} categoryCount={categories.length || 8} />
+      <TrustMetrics />
       <FeaturedProducts products={featured} />
       <WhyUs />
       <Inquiry />
@@ -63,54 +64,6 @@ function ScrollProgress() {
       style={{ scaleX: x, transformOrigin: "0% 50%" }}
       className="fixed inset-x-0 top-0 z-50 h-[3px] gradient-brand"
     />
-  );
-}
-
-/* ---------- STATS ---------- */
-function Counter({ to, suffix = "", duration = 1.6 }: { to: number; suffix?: string; duration?: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-  const mv = useMotionValue(0);
-  const rounded = useTransform(mv, (v) => Math.round(v).toString() + suffix);
-  const [text, setText] = useState("0" + suffix);
-  useEffect(() => {
-    if (!inView) return;
-    const controls = animate(mv, to, { duration, ease: "easeOut" });
-    const unsub = rounded.on("change", setText);
-    return () => { controls.stop(); unsub(); };
-  }, [inView, to, duration, mv, rounded]);
-  return <span ref={ref}>{text}</span>;
-}
-
-function Stats({ productCount, categoryCount }: { productCount: number; categoryCount: number }) {
-  const stats = [
-    { value: Math.max(productCount, 200), suffix: "+", label: "Products" },
-    { value: categoryCount, suffix: "+", label: "Categories" },
-    { value: 100, suffix: "%", label: "Quality Assured" },
-    { value: SITE.yearsExperience, suffix: "+", label: "Years of Trust" },
-  ];
-  return (
-    <section className="relative py-16 sm:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ duration: 0.6 }}
-          className="grid grid-cols-2 gap-3 rounded-3xl border border-border bg-card/60 p-6 shadow-glow backdrop-blur-xl sm:grid-cols-4 sm:p-8"
-        >
-          {stats.map((s, i) => (
-            <div
-              key={s.label}
-              className={`text-center ${i !== 0 ? "sm:border-l sm:border-border/60" : ""}`}
-            >
-              <p className="font-display text-3xl font-extrabold sm:text-4xl text-gradient-brand">
-                <Counter to={s.value} suffix={s.suffix} />
-              </p>
-              <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{s.label}</p>
-            </div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
   );
 }
 
