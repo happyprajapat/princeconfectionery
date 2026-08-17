@@ -165,7 +165,7 @@ export function TrustMetrics() {
                 initial={{ opacity: 0 }}
                 animate={inView ? { opacity: 1 } : {}}
                 transition={{ duration: 0.5, delay: reduced ? 0 : 0.9 + i * 0.12 }}
-                className="relative mt-4 max-w-[10rem] font-sans text-[10px] font-semibold uppercase leading-relaxed tracking-[0.2em] text-white/55 transition-colors duration-300 group-hover:text-white/85 sm:text-[11px]"
+                className="relative mt-4 max-w-[10rem] lg:min-h-[2.4rem] font-sans text-[10px] font-semibold uppercase leading-relaxed tracking-[0.2em] text-white/55 transition-colors duration-300 group-hover:text-white/85 sm:text-[11px]"
               >
                 {s.label}
               </motion.span>
