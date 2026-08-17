@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { motion, useInView, useMotionValue, useTransform, animate, useScroll, useSpring } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import {
   ArrowRight, Sparkles, Phone, MessageCircle, ShieldCheck, Truck, Award, Boxes, Leaf, PackageCheck,
   Cookie, Cake, Candy, Wheat, Croissant, Nut, ShoppingBasket, Flame, Star, CheckCircle2,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { SiteShell } from "@/components/site-shell";
 import { Hero } from "@/components/hero";
 import { BrandPartners } from "@/components/brand-partners";
