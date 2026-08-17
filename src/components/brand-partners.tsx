@@ -8,7 +8,7 @@ import { SITE } from "@/lib/site";
 const BRAND_STYLE = [
   { glow: "30 92% 60%", scale: 1.0 }, // Ginni — warm red/gold
   { glow: "355 80% 58%", scale: 1.1 }, // Shree Bajrang — red/gold
-  { glow: "148 58% 48%", scale: 1.0 }, // Mom's Basket — green/warm
+  { glow: "148 58% 48%", scale: 1.12 }, // Mom's Basket — green/warm
 ];
 
 function BrandColumn({
@@ -93,13 +93,13 @@ function BrandColumn({
         </div>
 
         <h3
-          className={`mt-7 flex min-h-[3.4rem] items-start justify-center font-hero text-[clamp(1.05rem,2vw,1.3rem)] font-extrabold uppercase leading-tight tracking-[0.08em] transition-colors duration-500 text-balance ${
+          className={`mt-6 flex min-h-0 sm:min-h-[3.4rem] items-start justify-center font-hero text-[clamp(1.05rem,2vw,1.3rem)] font-extrabold uppercase leading-tight tracking-[0.08em] transition-colors duration-500 text-balance ${
             dimmed ? "text-white/60" : "text-white/90"
           } group-hover:text-white`}
         >
           {brand.name}
         </h3>
-        <p className="mx-auto mt-3 max-w-[17rem] text-[0.83rem] leading-relaxed text-white/50 text-pretty">
+        <p className="mx-auto mt-2.5 max-w-[17rem] sm:mt-3 text-[0.83rem] leading-relaxed text-white/50 text-pretty">
           {brand.tagline}
         </p>
       </div>
